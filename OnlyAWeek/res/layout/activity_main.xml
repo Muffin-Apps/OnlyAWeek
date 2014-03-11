@@ -8,9 +8,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+    
+    <!-- 
+    <fragment class="org.muffinapps.PagerFragment"
+              android:id="@+id/pager_fragment"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" />
+ -->
 </RelativeLayout>
