@@ -3,10 +3,16 @@
 
     <string name="app_name">OnlyAWeek</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_add">Añadir</string>
+    <string name="action_sort">Ordenar por</string>
+    <string name="action_settings">Preferencias</string>
+    <string name="action_exit">Salir</string>
     <string name="hello_world">Hello world!</string>
-    <string name="preparingList_title">Preparando</string>
-    <string name="notPreparingList_title">PAS</string>
-    <string name="allList_title">Todos</string>
+    
+    <string-array name="lists_titles">
+        <item >Preparando</item>
+        <item >PAS</item>
+        <item >Todos</item>
+    </string-array>
 
 </resources>

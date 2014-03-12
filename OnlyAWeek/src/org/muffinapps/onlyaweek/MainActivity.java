@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity implements PagerAdapter.PageProvider, TabListener{
 	private static final int PREPARING_LIST = 0,
@@ -19,7 +20,7 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 	
 	private ViewPager viewPager;
 	private List<Fragment> listFragments;
-	private List<String> listTitles;
+	private String[] listTitles;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +29,9 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		listFragments = new ArrayList<Fragment>();
-		listTitles = new ArrayList<String>();
+		listTitles = getResources().getStringArray(R.array.lists_titles);
 		for(int i=0; i<3; i++)
 			listFragments.add(null);
-		listTitles.add(getResources().getString(R.string.preparingList_title));
-		listTitles.add(getResources().getString(R.string.notPreparingList_title));
-		listTitles.add(getResources().getString(R.string.allList_title));
 		
 		final ActionBar actionBar = getActionBar();
 		PagerAdapter adapter = new PagerAdapter(this, getSupportFragmentManager());
@@ -57,6 +55,26 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.action_add:
+	            //TODO
+	            return true;
+	        case R.id.action_sort:
+	        	//TODO
+	            return true;
+	        case R.id.action_settings:
+	        	//TODO
+	            return true;
+	        case R.id.action_exit:
+	        	//TODO
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 
 	
@@ -84,7 +102,7 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 
 	@Override
 	public String getPageTitle(int i) {
-		return listTitles.get(i);
+		return listTitles[i];
 	}
 
 	
