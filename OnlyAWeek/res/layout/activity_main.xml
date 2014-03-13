@@ -13,10 +13,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
     
-     
-    <fragment class="org.muffinapps.FragmentList"
-              android:id="@+id/fragmentList"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" />
- 
+   
 </RelativeLayout>

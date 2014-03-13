@@ -28,6 +28,6 @@ public class FragmentList extends Fragment{
 		super.onActivityCreated(state);
 		
 		list = (ListView)this.getView().findViewById(R.id.listSubject);
-		list.setAdapter(new AdapterSubject(this, R.layout.subject, data));
+		//list.setAdapter(new AdapterSubject(this, R.layout.subject, data));
 	}
 }

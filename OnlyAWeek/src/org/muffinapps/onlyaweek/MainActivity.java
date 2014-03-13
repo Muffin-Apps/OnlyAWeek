@@ -3,12 +3,14 @@ package org.muffinapps.onlyaweek;
 import java.util.ArrayList;
 import java.util.List;
 
+import prueba.DataSubject;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +21,7 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 			ALL_LIST = 2;
 	
 	private ViewPager viewPager;
-	private List<Fragment> listFragments;
+	private List<ListFragment> listFragments;
 	private String[] listTitles;
 	
 	@Override
@@ -28,7 +30,7 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		setContentView(R.layout.activity_main);
 		
 		viewPager = (ViewPager) findViewById(R.id.pager);
-		listFragments = new ArrayList<Fragment>();
+		listFragments = new ArrayList<ListFragment>();
 		listTitles = getResources().getStringArray(R.array.lists_titles);
 		for(int i=0; i<3; i++)
 			listFragments.add(null);
@@ -88,10 +90,12 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		// TODO Aqui irian la inicializacion de las listas
 		// Lo que hay ahora mismo es simplemente para poder probarlo
 		
-		Fragment result = listFragments.get(i);
-		if(result == null)
-			result = new DummyFragment();
+		ListFragment result = listFragments.get(i);
 		
+		if(result == null){
+			result = new ListFragment();
+			result.setListAdapter(new AdapterSubject(this, R.layout.subject, data));
+		}
 		return result;
 	}
 
@@ -135,5 +139,12 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 			return inflater.inflate(android.R.layout.simple_list_item_1, container, false);
 		}
 	}
+
+	private DataSubject[] data = new DataSubject[]{
+			new DataSubject("Dispositivos Moviles", "05/06/2014", 1200, 80, 2),
+			new DataSubject("DIU", "20/06/2014", 200, 20, 20),
+			new DataSubject("TFG", "15/06/2014", 2200, 120, 1),
+			new DataSubject("MDA", "10/06/2014", 800, 60, 8)
+			};
 
 }

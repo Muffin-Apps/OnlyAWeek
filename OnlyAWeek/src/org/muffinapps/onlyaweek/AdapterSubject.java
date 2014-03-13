@@ -22,11 +22,11 @@ public class AdapterSubject extends ArrayAdapter{
 	private Activity context;
 	private Object[] data;
 	
-	public AdapterSubject(Fragment context, int textViewResourceId,
+	public AdapterSubject(Activity context, int textViewResourceId,
 			Object[] objects) {
-		super(context.getActivity(), textViewResourceId, objects);
+		super(context, textViewResourceId, objects);
 		
-		this.context = context.getActivity();
+		this.context = context;
 		this.data = objects;
 	}
 	
@@ -62,19 +62,19 @@ public class AdapterSubject extends ArrayAdapter{
 		*/
 		
 		LayoutInflater inflater = context.getLayoutInflater();
-		View item = inflater.inflate(R.layout.list_subject, null);
+		View item = inflater.inflate(R.layout.subject, null);
 		
 		TextView date = (TextView) item.findViewById(R.id.dateSubject);
 		date.setText(((DataSubject) data[position]).date);
 		
 		TextView total = (TextView) item.findViewById(R.id.totalPag);
-		total.setText(((DataSubject) data[position]).totalPag);
+		total.setText(""+((DataSubject) data[position]).totalPag);
 		
 		TextView remaining = (TextView) item.findViewById(R.id.remainingPag);
-		remaining.setText(((DataSubject) data[position]).remainingPag);
+		remaining.setText(""+((DataSubject) data[position]).remainingPag);
 		
 		TextView assigned = (TextView) item.findViewById(R.id.assignedPag);
-		assigned.setText(((DataSubject) data[position]).assignedPag);
+		assigned.setText(""+((DataSubject) data[position]).assignedPag);
 		
 		return item;
 	}
