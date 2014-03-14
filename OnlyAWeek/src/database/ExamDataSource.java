@@ -43,9 +43,13 @@ public class ExamDataSource{
 	public Cursor getExam(long id){
 		Cursor c = null;
 		
+		openDBModeReader();
+		
 		c = db.query(NAME_TABLE, NAME_COL, NAME_COL[0] + " = ?", new String[]{String.valueOf(id)}, null, null, null, "1");
 		
 		c.moveToFirst();
+		
+		closeDB();
 		
 		return c;
 	}
@@ -53,9 +57,13 @@ public class ExamDataSource{
 	public Cursor getAllExam(){
 		Cursor c = null;
 		
+		openDBModeReader();
+		
 		c = db.query(NAME_TABLE, NAME_COL, null, null, null, null, null);
 		
 		c.moveToFirst();
+		
+		closeDB();
 		
 		return c;
 	}
@@ -63,9 +71,13 @@ public class ExamDataSource{
 	public Cursor getExamPreparation(){
 		Cursor c = null;
 		
+		openDBModeReader();
+		
 		c = db.query(NAME_TABLE, NAME_COL, NAME_COL[4] + " != null", null, null, null, null);
 		
 		c.moveToFirst();
+		
+		closeDB();
 		
 		return c;
 	}

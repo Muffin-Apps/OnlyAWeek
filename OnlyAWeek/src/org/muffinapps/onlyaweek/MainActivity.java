@@ -3,6 +3,8 @@ package org.muffinapps.onlyaweek;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.CustomCursorAdapter;
+import database.ExamDataSource;
 import prueba.DataSubject;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -23,10 +25,16 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 	private ViewPager viewPager;
 	private List<ListFragment> listFragments;
 	private String[] listTitles;
+	private ExamDataSource db;
+	private CustomCursorAdapter cursor;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		db = new ExamDataSource(this);
+		cursor = new CustomCursorAdapter(this, db.getAllExam(), false);
+		
 		setContentView(R.layout.activity_main);
 		
 		viewPager = (ViewPager) findViewById(R.id.pager);
@@ -94,7 +102,7 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		
 		if(result == null){
 			result = new ListFragment();
-			result.setListAdapter(new AdapterSubject(this, R.layout.subject, data));
+			result.setListAdapter(cursor);
 		}
 		return result;
 	}
