@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
+import android.content.ContentValues;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
@@ -59,6 +60,7 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		actionBar.addTab(actionBar.newTab().setText(getPageTitle(PREPARING_LIST)).setTabListener(this));
 		actionBar.addTab(actionBar.newTab().setText(getPageTitle(NO_PREPARING_LIST)).setTabListener(this));
 		actionBar.addTab(actionBar.newTab().setText(getPageTitle(ALL_LIST)).setTabListener(this));
+		
 	}
 
 	@Override
@@ -103,6 +105,8 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		if(result == null){
 			result = new ListFragment();
 			result.setListAdapter(cursor);
+			
+			insert();
 		}
 		return result;
 	}
@@ -146,6 +150,19 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		public android.view.View onCreateView(android.view.LayoutInflater inflater, android.view.ViewGroup container, Bundle savedInstanceState){
 			return inflater.inflate(android.R.layout.simple_list_item_1, container, false);
 		}
+	}
+	
+	public void insert(){
+		ContentValues content = new ContentValues();
+		content.put(ExamDataSource.NAME_COL[0], data[0].name);
+		content.put(ExamDataSource.NAME_COL[1], data[1].date);
+		content.put(ExamDataSource.NAME_COL[2], data[2].assignedPag);
+		content.put(ExamDataSource.NAME_COL[3], data[3].remainingPag);
+		content.put(ExamDataSource.NAME_COL[4], data[4].totalPag);
+		
+		db.insert(content);
+		
+		cursor.changeCursor(db.getAllExam());
 	}
 
 	private DataSubject[] data = new DataSubject[]{

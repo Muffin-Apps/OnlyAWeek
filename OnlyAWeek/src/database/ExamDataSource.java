@@ -1,5 +1,6 @@
 package database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,9 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ExamDataSource{
 	private static final String NAME_DB = "exams_db";
-	private static final String NAME_TABLE = "exams";
+	public static final String NAME_TABLE = "exams";
 	private static final int VERSION = 1;
-	private static final String [] NAME_COL = {"name", "date", "remainingPag",
+	public static final String [] NAME_COL = {"name", "date", "remainingPag",
 												"assignedPag", "totalPag"
 	};
 	
@@ -39,6 +40,14 @@ public class ExamDataSource{
             db = null;
         }
     }
+	
+	public void insert(ContentValues content){
+		openDBModeWriter();
+		
+		db.insert(NAME_TABLE, null, content);
+		
+		closeDB();
+	}
 	
 	public Cursor getExam(long id){
 		Cursor c = null;
