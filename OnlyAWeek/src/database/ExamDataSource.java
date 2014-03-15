@@ -24,13 +24,13 @@ public class ExamDataSource{
 	}
 	
 	private void openDBModeWriter(){
-		if(db != null){
+		if(db == null){
 			db = dbExamSqliteHelper.getWritableDatabase();
 		}
 	}
 	
 	private void openDBModeReader(){
-		if(db != null){
+		if(db == null){
 			db = dbExamSqliteHelper.getReadableDatabase();
 		}
 	}
@@ -59,8 +59,9 @@ public class ExamDataSource{
 	
 	public Cursor getAllExam(){
 		Cursor c = null;
+		String [] col = {NAME_COL[0], NAME_COL[1], NAME_COL[2]};
 		
-		c = db.query(NAME_TABLE, NAME_COL, null, null, null, null, null);
+		c = db.query(NAME_TABLE, col, null, null, null, null, null);
 		
 		c.moveToFirst();
 		
@@ -70,24 +71,29 @@ public class ExamDataSource{
 	public Cursor getExamPreparation(){
 		Cursor c = null;
 		
-		c = db.query(NAME_TABLE, NAME_COL, NAME_COL[5] + " != null", null, null, null, null);
+		c = db.query(NAME_TABLE, NAME_COL, NAME_COL[5] + " IS NOT NULL", null, null, null, null);
 		
 		c.moveToFirst();
 		
 		return c;
 	}
 	
-	/*
-	 * Decision de diseño:
-	 *  Yo creo que el nombre de la asign. es unico salvo los acronimos que creo que en distintas
-	 *  carreras se pueden repetir. Pero como la aplicacion es para un usuario no creo que esto pase.
-	 *
-	 */
+	public Cursor getExamNotPreparation(){
+		Cursor c = null;
+		String [] col = {NAME_COL[0], NAME_COL[1], NAME_COL[2]};
+		
+		c = db.query(NAME_TABLE, col, NAME_COL[5] + " IS NULL", null, null, null, null);
+		
+		c.moveToFirst();
+		
+		return c;
+	}
+	
 	private static class ExamSQLiteHelper extends SQLiteOpenHelper{
 		private static final String DB_CREATE="CREATE TABLE " + NAME_TABLE +
                 " ("+
                 NAME_COL[0] + " LONG PRIMARY KEY, " +
-                NAME_COL[1] + " TEXT PRIMARY KEY, " +  
+                NAME_COL[1] + " TEXT NOT NULL, " +  
                 NAME_COL[2] + " TEXT NOT NULL, " +
                 NAME_COL[3] + " INTEGER , " +
                 NAME_COL[4] + " INTEGER , " +

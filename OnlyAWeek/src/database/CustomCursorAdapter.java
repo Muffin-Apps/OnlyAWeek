@@ -29,19 +29,19 @@ public class CustomCursorAdapter extends CursorAdapter{
 	public void bindView(View view, Context context, Cursor cursor) {
 	
 		TextView name = (TextView) view.findViewById(R.id.nameSubject);
-		name.setText(cursor.getString(0));
+		name.setText(cursor.getString(1));
 		
 		TextView date = (TextView) view.findViewById(R.id.dateSubject);
-		date.setText(cursor.getString(1));
+		date.setText(cursor.getString(2));
 		
 		TextView remainingPag = (TextView) view.findViewById(R.id.remainingPag);
-		remainingPag.setText(cursor.getString(2));
+		remainingPag.setText(cursor.getString(3));
 		
 		TextView assignedPag = (TextView) view.findViewById(R.id.assignedPag);
-		assignedPag.setText(cursor.getString(3));
+		assignedPag.setText(cursor.getString(4));
 		
 		TextView totalPag = (TextView) view.findViewById(R.id.totalPag);
-		totalPag.setText(cursor.getString(4));
+		totalPag.setText(cursor.getString(5));
 	}
 
 }

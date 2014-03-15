@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.CustomCursorAdapter;
+import database.ExamCursorAdapter;
 import database.ExamDataSource;
 import prueba.DataSubject;
 import android.os.Bundle;
@@ -27,14 +28,18 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 	private List<ListFragment> listFragments;
 	private String[] listTitles;
 	private ExamDataSource db;
-	private CustomCursorAdapter cursor;
+	private CustomCursorAdapter adapterExamPrepar;
+	private ExamCursorAdapter adapterExam;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		db = new ExamDataSource(this);
-		cursor = new CustomCursorAdapter(this, db.getAllExam(), false);
+		insert();
+		
+		adapterExamPrepar = new CustomCursorAdapter(this, db.getExamPreparation(), false);
+		adapterExam = new ExamCursorAdapter(this, db.getExamNotPreparation(), false);
 		
 		setContentView(R.layout.activity_main);
 		
@@ -103,10 +108,20 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		ListFragment result = listFragments.get(i);
 		
 		if(result == null){
-			result = new ListFragment();
-			result.setListAdapter(cursor);
-			
-			insert();
+			if(i == 0){
+				result = new ListFragment();
+				result.setListAdapter(adapterExamPrepar);
+				
+				adapterExamPrepar.changeCursor(db.getExamPreparation());
+			}else{
+				result = new ListFragment();
+				result.setListAdapter(adapterExam);
+				
+				if(i == 1)
+					adapterExam.changeCursor(db.getExamNotPreparation());
+				else
+					adapterExam.changeCursor(db.getAllExam());
+			}
 		}
 		return result;
 	}
@@ -155,21 +170,24 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 	public void insert(){
 		ContentValues content = new ContentValues();
 		content.put(ExamDataSource.NAME_COL[1], data[0].name);
-		content.put(ExamDataSource.NAME_COL[2], data[1].date);
-		content.put(ExamDataSource.NAME_COL[3], data[2].assignedPag);
-		content.put(ExamDataSource.NAME_COL[4], data[3].remainingPag);
-		content.put(ExamDataSource.NAME_COL[5], data[4].totalPag);
+		content.put(ExamDataSource.NAME_COL[2], data[0].date);
+		content.put(ExamDataSource.NAME_COL[3], data[0].assignedPag);
+		content.put(ExamDataSource.NAME_COL[4], data[0].remainingPag);
+		content.put(ExamDataSource.NAME_COL[5], data[0].totalPag);
 		
 		db.insert(content);
 		
-		cursor.changeCursor(db.getAllExam());
+		content.clear();
+		
+		content.put(ExamDataSource.NAME_COL[1], data[1].name);
+		content.put(ExamDataSource.NAME_COL[2], data[1].date);
+		
+		db.insert(content);
 	}
-
+	
 	private DataSubject[] data = new DataSubject[]{
 			new DataSubject("Dispositivos Moviles", "05/06/2014", 1200, 80, 2),
-			new DataSubject("DIU", "20/06/2014", 200, 20, 20),
-			new DataSubject("TFG", "15/06/2014", 2200, 120, 1),
-			new DataSubject("MDA", "10/06/2014", 800, 60, 8)
+			new DataSubject("DIU", "20/06/2014", 0, 0, 0),
 			};
 
 }
