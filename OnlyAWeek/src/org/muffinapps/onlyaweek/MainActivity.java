@@ -154,11 +154,11 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 	
 	public void insert(){
 		ContentValues content = new ContentValues();
-		content.put(ExamDataSource.NAME_COL[0], data[0].name);
-		content.put(ExamDataSource.NAME_COL[1], data[1].date);
-		content.put(ExamDataSource.NAME_COL[2], data[2].assignedPag);
-		content.put(ExamDataSource.NAME_COL[3], data[3].remainingPag);
-		content.put(ExamDataSource.NAME_COL[4], data[4].totalPag);
+		content.put(ExamDataSource.NAME_COL[1], data[0].name);
+		content.put(ExamDataSource.NAME_COL[2], data[1].date);
+		content.put(ExamDataSource.NAME_COL[3], data[2].assignedPag);
+		content.put(ExamDataSource.NAME_COL[4], data[3].remainingPag);
+		content.put(ExamDataSource.NAME_COL[5], data[4].totalPag);
 		
 		db.insert(content);
 		

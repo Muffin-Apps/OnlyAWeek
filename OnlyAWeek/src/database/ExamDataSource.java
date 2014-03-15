@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ExamDataSource{
 	private static final String NAME_DB = "exams_db";
 	public static final String NAME_TABLE = "exams";
-	private static final int VERSION = 1;
-	public static final String [] NAME_COL = {"name", "date", "remainingPag",
+	private static final int VERSION = 2;
+	public static final String [] NAME_COL = {"_id", "name", "date", "remainingPag",
 												"assignedPag", "totalPag"
 	};
 	
@@ -20,6 +20,7 @@ public class ExamDataSource{
     
 	public ExamDataSource(Context context){
 		dbExamSqliteHelper = new ExamSQLiteHelper(context, NAME_DB, null, VERSION);
+		openDBModeWriter();
 	}
 	
 	private void openDBModeWriter(){
@@ -34,7 +35,7 @@ public class ExamDataSource{
 		}
 	}
 	
-	private void closeDB(){
+	public void closeDB(){
         if(db != null){
             db.close();
             db = null;
@@ -42,23 +43,16 @@ public class ExamDataSource{
     }
 	
 	public void insert(ContentValues content){
-		openDBModeWriter();
 		
 		db.insert(NAME_TABLE, null, content);
-		
-		closeDB();
 	}
 	
 	public Cursor getExam(long id){
 		Cursor c = null;
 		
-		openDBModeReader();
-		
 		c = db.query(NAME_TABLE, NAME_COL, NAME_COL[0] + " = ?", new String[]{String.valueOf(id)}, null, null, null, "1");
 		
 		c.moveToFirst();
-		
-		closeDB();
 		
 		return c;
 	}
@@ -66,13 +60,9 @@ public class ExamDataSource{
 	public Cursor getAllExam(){
 		Cursor c = null;
 		
-		openDBModeReader();
-		
 		c = db.query(NAME_TABLE, NAME_COL, null, null, null, null, null);
 		
 		c.moveToFirst();
-		
-		closeDB();
 		
 		return c;
 	}
@@ -80,13 +70,9 @@ public class ExamDataSource{
 	public Cursor getExamPreparation(){
 		Cursor c = null;
 		
-		openDBModeReader();
-		
-		c = db.query(NAME_TABLE, NAME_COL, NAME_COL[4] + " != null", null, null, null, null);
+		c = db.query(NAME_TABLE, NAME_COL, NAME_COL[5] + " != null", null, null, null, null);
 		
 		c.moveToFirst();
-		
-		closeDB();
 		
 		return c;
 	}
@@ -100,11 +86,12 @@ public class ExamDataSource{
 	private static class ExamSQLiteHelper extends SQLiteOpenHelper{
 		private static final String DB_CREATE="CREATE TABLE " + NAME_TABLE +
                 " ("+
-                NAME_COL[0] + " TEXT PRIMARY KEY, " +  
-                NAME_COL[1] + " TEXT NOT NULL, " +
-                NAME_COL[2] + " INTEGER NOT NULL, " +
-                NAME_COL[3] + " INTEGER NOT NULL, " +
-                NAME_COL[4] + " INTEGER NOT NULL);";
+                NAME_COL[0] + " LONG PRIMARY KEY, " +
+                NAME_COL[1] + " TEXT PRIMARY KEY, " +  
+                NAME_COL[2] + " TEXT NOT NULL, " +
+                NAME_COL[3] + " INTEGER , " +
+                NAME_COL[4] + " INTEGER , " +
+                NAME_COL[5] + " INTEGER );";
 
 		public ExamSQLiteHelper(Context context, String name,
 				CursorFactory factory, int version) {
