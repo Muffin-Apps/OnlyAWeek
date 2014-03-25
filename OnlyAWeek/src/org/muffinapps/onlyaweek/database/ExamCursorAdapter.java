@@ -1,4 +1,4 @@
-package database;
+package org.muffinapps.onlyaweek.database;
 
 import org.muffinapps.onlyaweek.R;
 

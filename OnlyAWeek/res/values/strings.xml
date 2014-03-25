@@ -4,6 +4,8 @@
     <string name="app_name">OnlyAWeek</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="action_add">Añadir</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_delete">Borrar</string>
     <string name="action_sort">Ordenar por</string>
     <string name="action_settings">Preferencias</string>
     <string name="action_exit">Salir</string>

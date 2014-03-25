@@ -1,4 +1,4 @@
-package database;
+package org.muffinapps.onlyaweek.database;
 
 import android.content.ContentValues;
 import android.content.Context;

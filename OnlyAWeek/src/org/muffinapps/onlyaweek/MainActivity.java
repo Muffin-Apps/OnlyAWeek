@@ -3,9 +3,11 @@ package org.muffinapps.onlyaweek;
 import java.util.ArrayList;
 import java.util.List;
 
-import database.CustomCursorAdapter;
-import database.ExamCursorAdapter;
-import database.ExamDataSource;
+import org.muffinapps.onlyaweek.database.CustomCursorAdapter;
+import org.muffinapps.onlyaweek.database.ExamCursorAdapter;
+import org.muffinapps.onlyaweek.database.ExamDataSource;
+
+
 import prueba.DataSubject;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -16,20 +18,28 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ListView;
 import android.view.MenuItem;
 
-public class MainActivity extends FragmentActivity implements PagerAdapter.PageProvider, TabListener{
+public class MainActivity extends FragmentActivity implements PagerAdapter.PageProvider, TabListener, 
+															View.OnLongClickListener, AbsListView.MultiChoiceModeListener{
 	private static final int PREPARING_LIST = 0,
 			NO_PREPARING_LIST = 1,
 			ALL_LIST = 2;
 	
+	private ActionMode actionMode;
 	private ViewPager viewPager;
 	private List<ListFragment> listFragments;
 	private String[] listTitles;
 	private ExamDataSource db;
 	private CustomCursorAdapter adapterExamPrepar;
 	private ExamCursorAdapter adapterExam;
+	private ListFragment currentListFragment;
+	private int numItemsSelected;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -189,5 +199,69 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 			new DataSubject("Dispositivos Moviles", "05/06/2014", 1200, 80, 2),
 			new DataSubject("DIU", "20/06/2014", 0, 0, 0),
 			};
+	
+	@Override
+	public boolean onLongClick(View view) {
+		if(actionMode != null)
+			return false;
+		
+		actionMode = startActionMode(this);
+		view.setSelected(true);
+		currentListFragment.getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		
+		return true;
+	}
+
+	@Override
+	public boolean onActionItemClicked(ActionMode arg0, MenuItem item) {
+		switch(item.getItemId()){
+		case R.id.action_edit:
+			//TODO
+			return true;
+		case R.id.action_delete:
+			//TODO
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@Override
+	public boolean onCreateActionMode(ActionMode arg0, Menu arg1) {
+		numItemsSelected = 0;
+
+		return true;
+	}
+
+	@Override
+	public void onDestroyActionMode(ActionMode arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onItemCheckedStateChanged(ActionMode arg0, int arg1, long arg2,
+			boolean checked) {
+		if(checked){
+			numItemsSelected++;
+			if(numItemsSelected > 1){
+				//TODO
+			}
+		}else{
+			numItemsSelected--;
+			if(numItemsSelected == 1){
+				//TODO 
+			}
+			if(numItemsSelected == 0){
+				//TODO 
+			}
+		}
+	}
 
 }
