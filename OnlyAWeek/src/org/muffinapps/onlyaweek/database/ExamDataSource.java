@@ -89,6 +89,30 @@ public class ExamDataSource{
 		return c;
 	}
 	
+	public void deleteExam(long id){
+		deleteExams(new long[]{id});
+	}
+	
+	public void deleteExams(long[] ids){
+		int n = ids.length;
+		
+		if(n == 0)
+			return;
+		
+		StringBuilder builder = new StringBuilder();
+		
+		for(int i=0; i<n-1; i++){
+			builder.append(ids[i]);
+			builder.append(", ");
+		}
+		
+		builder.append(ids[n-1]);
+		
+		
+		db.delete(NAME_TABLE, NAME_COL[0] + " IN (" + builder.toString() + ")", null);
+	}
+	
+	
 	private static class ExamSQLiteHelper extends SQLiteOpenHelper{
 		private static final String DB_CREATE="CREATE TABLE " + NAME_TABLE +
                 " ("+

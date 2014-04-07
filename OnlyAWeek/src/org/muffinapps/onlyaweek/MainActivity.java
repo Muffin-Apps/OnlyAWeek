@@ -22,18 +22,20 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity implements PagerAdapter.PageProvider, TabListener, 
-															View.OnLongClickListener, AbsListView.MultiChoiceModeListener{
+															AbsListView.MultiChoiceModeListener, OnItemLongClickListener{
 	private static final int PREPARING_LIST = 0,
 			NO_PREPARING_LIST = 1,
 			ALL_LIST = 2;
 	
 	private ActionMode actionMode;
 	private ViewPager viewPager;
-	private List<ListFragment> listFragments;
+	private List<ExamListFragment> listFragments;
 	private String[] listTitles;
 	private ExamDataSource db;
 	private CustomCursorAdapter adapterExamPrepar;
@@ -51,10 +53,11 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		adapterExamPrepar = new CustomCursorAdapter(this, db.getExamPreparation(), false);
 		adapterExam = new ExamCursorAdapter(this, db.getExamNotPreparation(), false);
 		
+		
 		setContentView(R.layout.activity_main);
 		
 		viewPager = (ViewPager) findViewById(R.id.pager);
-		listFragments = new ArrayList<ListFragment>();
+		listFragments = new ArrayList<ExamListFragment>();
 		listTitles = getResources().getStringArray(R.array.lists_titles);
 		for(int i=0; i<3; i++)
 			listFragments.add(null);
@@ -115,17 +118,21 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		// TODO Aqui irian la inicializacion de las listas
 		// Lo que hay ahora mismo es simplemente para poder probarlo
 		
-		ListFragment result = listFragments.get(i);
+		ExamListFragment result = listFragments.get(i);
 		
 		if(result == null){
 			if(i == 0){
-				result = new ListFragment();
+				result = new ExamListFragment();
 				result.setListAdapter(adapterExamPrepar);
+				
+				result.setLongClickListener(this);
 				
 				adapterExamPrepar.changeCursor(db.getExamPreparation());
 			}else{
-				result = new ListFragment();
+				result = new ExamListFragment();
 				result.setListAdapter(adapterExam);
+				
+				result.setLongClickListener(this);
 				
 				if(i == 1)
 					adapterExam.changeCursor(db.getExamNotPreparation());
@@ -133,7 +140,8 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 					adapterExam.changeCursor(db.getAllExam());
 			}
 		}
-		return result;
+		
+		return currentListFragment = result;
 	}
 
 	@Override
@@ -164,8 +172,10 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 
 	@Override
 	public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-		
+		if(actionMode != null){
+			actionMode.finish();
+			actionMode = null;
+		}
 	}
 	
 
@@ -199,18 +209,6 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 			new DataSubject("Dispositivos Moviles", "05/06/2014", 1200, 80, 2),
 			new DataSubject("DIU", "20/06/2014", 0, 0, 0),
 			};
-	
-	@Override
-	public boolean onLongClick(View view) {
-		if(actionMode != null)
-			return false;
-		
-		actionMode = startActionMode(this);
-		view.setSelected(true);
-		currentListFragment.getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		
-		return true;
-	}
 
 	@Override
 	public boolean onActionItemClicked(ActionMode arg0, MenuItem item) {
@@ -219,7 +217,8 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 			//TODO
 			return true;
 		case R.id.action_delete:
-			//TODO
+			//TODO dialog
+			//db.deleteExams(currentListFragment.getListView().getCheckedItemIds());
 			return true;
 		default:
 			return false;
@@ -227,9 +226,9 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 	}
 
 	@Override
-	public boolean onCreateActionMode(ActionMode arg0, Menu arg1) {
+	public boolean onCreateActionMode(ActionMode arg0, Menu menu) {
 		numItemsSelected = 0;
-
+		getMenuInflater().inflate(R.menu.main_context, menu);
 		return true;
 	}
 
@@ -241,27 +240,47 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 
 	@Override
 	public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
 	@Override
-	public void onItemCheckedStateChanged(ActionMode arg0, int arg1, long arg2,
+	public void onItemCheckedStateChanged(ActionMode actionMode, int arg1, long arg2,
 			boolean checked) {
+		android.util.Log.v("XXXX", "State checked " + checked);
 		if(checked){
 			numItemsSelected++;
 			if(numItemsSelected > 1){
-				//TODO
+				MenuItem item = actionMode.getMenu().findItem(R.id.action_edit);
+				item.setEnabled(false).setVisible(false);
 			}
 		}else{
 			numItemsSelected--;
 			if(numItemsSelected == 1){
-				//TODO 
+				MenuItem item = actionMode.getMenu().findItem(R.id.action_edit);
+				item.setEnabled(false).setVisible(false);
 			}
 			if(numItemsSelected == 0){
-				//TODO 
+				actionMode.finish();
+				actionMode = null;
 			}
 		}
+		android.util.Log.v("XXXX", "State checked " + numItemsSelected);
+	}
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> adapter, View view, int pos,
+			long id) {
+		if(actionMode != null)
+			return false;
+		
+		actionMode = startActionMode(this);
+		ListView currentList = currentListFragment.getListView(); 
+		currentList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		currentList.setMultiChoiceModeListener(this);
+		//view.setSelected(true);
+		
+		return true;
 	}
 
 }
