@@ -1,22 +1,15 @@
 package org.muffinapps.onlyaweek;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.muffinapps.onlyaweek.database.CustomCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamDataSource;
 
 import prueba.DataSubject;
 import android.os.Bundle;
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.ActionBar.TabListener;
 import android.content.ContentValues;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
-import android.support.v4.view.ViewPager;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.View;
@@ -26,16 +19,12 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.view.MenuItem;
 
-public class MainActivity extends FragmentActivity implements PagerAdapter.PageProvider, TabListener, 
-															AbsListView.MultiChoiceModeListener, OnItemLongClickListener{
+public class MainActivity extends FragmentActivity implements AbsListView.MultiChoiceModeListener, OnItemLongClickListener{
 	private static final int PREPARING_LIST = 0,
 			NO_PREPARING_LIST = 1,
 			ALL_LIST = 2;
 	
 	private ActionMode actionMode;
-	private ViewPager viewPager;
-	private List<ExamListFragment> listFragments;
-	private String[] listTitles;
 	private ExamDataSource db;
 	private CustomCursorAdapter adapterExamPrepar;
 	private ExamCursorAdapter adapterExam;
@@ -45,6 +34,7 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 		
 		db = new ExamDataSource(this);
 		insert();
@@ -52,34 +42,17 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		adapterExamPrepar = new CustomCursorAdapter(this, db.getExamPreparation(), false);
 		adapterExam = new ExamCursorAdapter(this, db.getExamNotPreparation(), false);
 		
-		
-		setContentView(R.layout.activity_main);
-		
-		viewPager = (ViewPager) findViewById(R.id.pager);
-		listFragments = new ArrayList<ExamListFragment>();
-		listTitles = getResources().getStringArray(R.array.lists_titles);
-		for(int i=0; i<3; i++)
-			listFragments.add(null);
-		
-		final ActionBar actionBar = getActionBar();
-		PagerAdapter adapter = new PagerAdapter(this, getSupportFragmentManager());
-		
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		
-		viewPager.setAdapter(adapter);
-		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-            public void onPageSelected(int pos) {
-                actionBar.setSelectedNavigationItem(pos);
-            }
-        });
-		
-		actionBar.addTab(actionBar.newTab().setText(getPageTitle(PREPARING_LIST)).setTabListener(this));
-		actionBar.addTab(actionBar.newTab().setText(getPageTitle(NO_PREPARING_LIST)).setTabListener(this));
-		actionBar.addTab(actionBar.newTab().setText(getPageTitle(ALL_LIST)).setTabListener(this));
-		
 	}
 
+	@Override
+	public void onStart(){
+		super.onStart();
+		//PA PROBAR NA MAS
+		ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.FrgList);
+		//adapterExam = new ExamCursorAdapter(this, db.getAllExam(), false);
+		fragment.getListView().setAdapter(adapterExam);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -106,77 +79,7 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 	    }
 	}
 
-	
-	
-	//*****************************************************************************************************************
-	// Implementacion PageProvider
-	//*****************************************************************************************************************
-	
-	@Override
-	public Fragment getPage(int i) {
-		// TODO Aqui irian la inicializacion de las listas
-		// Lo que hay ahora mismo es simplemente para poder probarlo
 		
-		ExamListFragment result = listFragments.get(i);
-		
-		if(result == null){
-			if(i == 0){
-				result = new ExamListFragment();
-				result.setListAdapter(adapterExamPrepar);
-				
-				result.setLongClickListener(this);
-				
-				adapterExamPrepar.changeCursor(db.getExamPreparation());
-			}else{
-				result = new ExamListFragment();
-				result.setListAdapter(adapterExam);
-				
-				result.setLongClickListener(this);
-				
-				if(i == 1)
-					adapterExam.changeCursor(db.getExamNotPreparation());
-				else
-					adapterExam.changeCursor(db.getAllExam());
-			}
-		}
-		
-		return currentListFragment = result;
-	}
-
-	@Override
-	public int getCount() {
-		return 3;
-	}
-
-	@Override
-	public String getPageTitle(int i) {
-		return listTitles[i];
-	}
-
-	
-	
-	//*****************************************************************************************************************
-	// Implementacion TabListener
-	//*****************************************************************************************************************
-	@Override
-	public void onTabReselected(Tab tab, android.app.FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTabSelected(Tab tab, android.app.FragmentTransaction ft) {
-		viewPager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
-		if(actionMode != null){
-			actionMode.finish();
-			actionMode = null;
-		}
-	}
-	
 
 	// Esta clase esta simplemente para poder probarlo
 	public static class DummyFragment extends Fragment{		
