@@ -20,7 +20,8 @@ public class DatePickerDialogFragment extends DialogFragment{
 		dateListener = listener;
 	}
 
-	public Dialog OnCreateDialog(Bundle savedInstanceState){
+	@Override
+	public Dialog onCreateDialog(Bundle savedInstanceState){
 		Calendar cal = Calendar.getInstance();
 		
 		return new DatePickerDialog(getActivity(), dateListener, cal.get(Calendar.YEAR),

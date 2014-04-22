@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
  
-    <fragment class="org.muffinapps.onlyaweek.ExamListFragment"
-        android:id="@+id/FrgList"
-        android:layout_weight="40"
-        android:layout_width="match_parent"
-        android:layout_height="0px" />
- 
-    <fragment class="org.muffinapps.onlyaweek.AddNewExamFragment"
-        android:id="@+id/FrgAddNewExam"
-        android:layout_weight="60"
-        android:layout_width="match_parent"
-        android:layout_height="0px" />
- 
+    <FrameLayout
+    android:id="@+id/main_content_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">   
+	</FrameLayout>
+
+    <FrameLayout
+    android:id="@+id/add_exam_content_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">   
+	</FrameLayout>
+
 </LinearLayout>

@@ -7,8 +7,10 @@ import org.muffinapps.onlyaweek.database.ExamDataSource;
 import prueba.DataSubject;
 import android.os.Bundle;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -29,6 +31,7 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 	private CustomCursorAdapter adapterExamPrepar;
 	private ExamCursorAdapter adapterExam;
 	private ListFragment currentListFragment;
+	private ExamListFragment listFragment;
 	private int numItemsSelected;
 	
 	@Override
@@ -37,20 +40,25 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		setContentView(R.layout.activity_main);
 		
 		db = new ExamDataSource(this);
-		insert();
+		//insert();
 		
 		adapterExamPrepar = new CustomCursorAdapter(this, db.getExamPreparation(), false);
-		adapterExam = new ExamCursorAdapter(this, db.getExamNotPreparation(), false);
+		adapterExam = new ExamCursorAdapter(this, db.getAllExam(), false);
+		
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		listFragment = new ExamListFragment();
+		fragmentTransaction.replace(R.id.main_content_frame, listFragment);
+		fragmentTransaction.commit();
 		
 	}
 
 	@Override
-	public void onStart(){
-		super.onStart();
+	public void onResume(){
+		super.onResume();
 		//PA PROBAR NA MAS
-		ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.FrgList);
+		//ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.FrgList);
 		//adapterExam = new ExamCursorAdapter(this, db.getAllExam(), false);
-		fragment.getListView().setAdapter(adapterExam);
+		listFragment.setListAdapter(adapterExam);
 	}
 	
 	@Override
@@ -63,7 +71,8 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	        case R.id.action_add:
-	            //TODO
+	            Intent intent = new Intent(this, AddNewExamActivity.class);
+	            startActivity(intent);
 	            return true;
 	        case R.id.action_sort:
 	        	//TODO

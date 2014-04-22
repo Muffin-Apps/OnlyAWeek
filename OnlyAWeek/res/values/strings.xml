@@ -13,11 +13,13 @@
     <string name="exam_name">Nombre</string>
     <string name="exam_date">dd/mm/aaaa</string>
     <string name="exam_pages">Total de páginas</string>
-    
+
     <string-array name="lists_titles">
-        <item >Preparando</item>
-        <item >PAS</item>
-        <item >Todos</item>
+        <item>Preparando</item>
+        <item>PAS</item>
+        <item>Todos</item>
     </string-array>
+
+    <string name="title_activity_add_new_exam">AddNewExamActivity</string>
 
 </resources>

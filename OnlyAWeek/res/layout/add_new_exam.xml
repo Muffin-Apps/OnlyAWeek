@@ -13,13 +13,13 @@
         <requestFocus />
     </EditText>
 
-    <EditText
+    <TextView
+        style="@android:style/Widget.Holo.Light.Spinner"
         android:id="@+id/addExamDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/exam_date"
-        android:inputType="date" />
+        android:hint="@string/exam_date"/>
 
     <EditText
         android:id="@+id/addExamPages"
