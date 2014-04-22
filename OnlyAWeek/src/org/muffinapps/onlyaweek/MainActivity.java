@@ -7,7 +7,6 @@ import org.muffinapps.onlyaweek.database.CustomCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamDataSource;
 
-
 import prueba.DataSubject;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -282,5 +281,6 @@ public class MainActivity extends FragmentActivity implements PagerAdapter.PageP
 		
 		return true;
 	}
+
 
 }

@@ -10,6 +10,9 @@
     <string name="action_settings">Preferencias</string>
     <string name="action_exit">Salir</string>
     <string name="hello_world">Hello world!</string>
+    <string name="exam_name">Nombre</string>
+    <string name="exam_date">dd/mm/aaaa</string>
+    <string name="exam_pages">Total de páginas</string>
     
     <string-array name="lists_titles">
         <item >Preparando</item>
