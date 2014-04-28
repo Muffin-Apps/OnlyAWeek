@@ -6,6 +6,8 @@ import org.muffinapps.onlyaweek.database.ExamDataSource;
 
 import prueba.DataSubject;
 import android.os.Bundle;
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -18,10 +20,11 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.view.MenuItem;
 
-public class MainActivity extends FragmentActivity implements AbsListView.MultiChoiceModeListener, OnItemLongClickListener{
+public class MainActivity extends FragmentActivity implements AbsListView.MultiChoiceModeListener, OnItemLongClickListener, OnNavigationListener{
 	private static final int PREPARING_LIST = 0,
 			NO_PREPARING_LIST = 1,
 			ALL_LIST = 2;
@@ -34,6 +37,8 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 	private ExamListFragment listFragment;
 	private int numItemsSelected;
 	
+	private int currentContent;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,11 +50,23 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		adapterExamPrepar = new CustomCursorAdapter(this, db.getExamPreparation(), false);
 		adapterExam = new ExamCursorAdapter(this, db.getAllExam(), false);
 		
-		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
 		listFragment = new ExamListFragment();
+		listFragment.setListAdapter(adapterExamPrepar);
+		
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		fragmentTransaction.replace(R.id.main_content_frame, listFragment);
 		fragmentTransaction.commit();
 		
+		String[] listnames = getResources().getStringArray(R.array.lists_titles);
+		ArrayAdapter<String> aAdpt = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, android.R.id.text1, listnames);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+		actionBar.setListNavigationCallbacks(aAdpt, this);
 	}
 
 	@Override
@@ -58,7 +75,6 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		//PA PROBAR NA MAS
 		//ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.FrgList);
 		//adapterExam = new ExamCursorAdapter(this, db.getAllExam(), false);
-		listFragment.setListAdapter(adapterExam);
 	}
 	
 	@Override
@@ -193,6 +209,43 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		
 		return true;
 	}
+
+	@Override
+	public boolean onNavigationItemSelected(int position, long id) {
+		int newContent;
+		switch(position){
+		case 0:
+			newContent = PREPARING_LIST;
+			break;
+		case 1:
+			newContent = NO_PREPARING_LIST;
+			break;
+		case 2:
+			newContent = ALL_LIST;
+			break;
+		default: return false;
+		}
+		
+		if(newContent != currentContent){
+			currentContent = newContent;
+			setContent();
+		}
+		
+		return true;
+	}
+
+	private void setContent() {
+		switch(currentContent){
+		case PREPARING_LIST:
+			break;
+		case NO_PREPARING_LIST:
+			break;
+		case ALL_LIST:
+			break;
+		}
+	}
+	
+	
 
 
 }
