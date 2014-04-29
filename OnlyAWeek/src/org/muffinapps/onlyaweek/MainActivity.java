@@ -34,7 +34,7 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 	private CustomCursorAdapter adapterExamPrepar;
 	private ExamCursorAdapter adapterExam;
 	private ListFragment currentListFragment;
-	private ExamListFragment listFragment;
+	private ExamListFragment allListFragment, preparingListFragment, notPreparingListFragment;
 	private int numItemsSelected;
 	
 	private int currentContent;
@@ -50,13 +50,6 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		adapterExamPrepar = new CustomCursorAdapter(this, db.getExamPreparation(), false);
 		adapterExam = new ExamCursorAdapter(this, db.getAllExam(), false);
 		
-
-		listFragment = new ExamListFragment();
-		listFragment.setListAdapter(adapterExamPrepar);
-		
-		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-		fragmentTransaction.replace(R.id.main_content_frame, listFragment);
-		fragmentTransaction.commit();
 		
 		String[] listnames = getResources().getStringArray(R.array.lists_titles);
 		ArrayAdapter<String> aAdpt = new ArrayAdapter<String>(this,
@@ -67,15 +60,13 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
 		actionBar.setListNavigationCallbacks(aAdpt, this);
+		
+		currentContent = PREPARING_LIST;
+		
+		setContent();
 	}
 
-	@Override
-	public void onResume(){
-		super.onResume();
-		//PA PROBAR NA MAS
-		//ListFragment fragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.FrgList);
-		//adapterExam = new ExamCursorAdapter(this, db.getAllExam(), false);
-	}
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -245,14 +236,35 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 	}
 
 	private void setContent() {
+		ExamListFragment listFragment = null;
 		switch(currentContent){
 		case PREPARING_LIST:
+			if(preparingListFragment == null){
+				preparingListFragment = new ExamListFragment();
+				preparingListFragment.setListAdapter(new CustomCursorAdapter(this, db.getExamPreparation(), false));
+			}
+			listFragment = preparingListFragment;
 			break;
 		case NO_PREPARING_LIST:
+			if(notPreparingListFragment == null){
+				notPreparingListFragment = new ExamListFragment();
+				notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this, db.getExamNotPreparation(), false));
+			}
+			listFragment = notPreparingListFragment;
 			break;
 		case ALL_LIST:
+			if(allListFragment == null){
+				allListFragment = new ExamListFragment();
+				allListFragment.setListAdapter(new ExamCursorAdapter(this, db.getAllExam(), false));
+			}
+			listFragment = allListFragment;
 			break;
 		}
+		
+		
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		fragmentTransaction.replace(R.id.main_content_frame, listFragment);
+		fragmentTransaction.commit();
 	}
 	
 	
