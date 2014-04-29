@@ -11,9 +11,7 @@ public class ExamDataSource{
 	private static final String NAME_DB = "exams_db";
 	public static final String NAME_TABLE = "exams";
 	private static final int VERSION = 2;
-	public static final String [] NAME_COL = {"_id", "name", "date", "remainingPag",
-												"assignedPag", "totalPag"
-	};
+	public static final String [] NAME_COL = {"_id", "name", "date", "remainingPag", "totalPag"};
 	
 	private SQLiteDatabase db;
     private ExamSQLiteHelper dbExamSqliteHelper;
@@ -42,7 +40,11 @@ public class ExamDataSource{
         }
     }
 	
-	public void insert(ContentValues content){
+	public void insertNewExam(String name, String date, int totalPag){
+		ContentValues content = new ContentValues();
+		content.put(ExamDataSource.NAME_COL[1], name);
+		content.put(ExamDataSource.NAME_COL[2], date);
+		content.put(ExamDataSource.NAME_COL[4], totalPag);
 		
 		db.insert(NAME_TABLE, null, content);
 	}
