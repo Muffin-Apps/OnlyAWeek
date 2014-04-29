@@ -19,6 +19,7 @@ import android.widget.TextView;
 public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
 	private EditText name;
 	private TextView date;
+	private OnConfirmListener listener;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstance){
@@ -50,7 +51,16 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		date.setText(f.format("dd/M/yyyy", cal.getTime()));
 	}
 	
+	public void setOnConfirmListener(OnConfirmListener l){
+		listener = l;
+	}
+	
 	public void mostrarDetalle(String texto){
 		
+	}
+	
+	public interface OnConfirmListener{
+		public void onAdd();
+		public void onEdit();
 	}
 }

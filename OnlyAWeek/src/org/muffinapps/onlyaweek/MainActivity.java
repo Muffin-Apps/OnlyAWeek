@@ -125,7 +125,7 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 	}
 	
 	public void insert(){
-		ContentValues content = new ContentValues();
+		/*ContentValues content = new ContentValues();
 		content.put(ExamDataSource.NAME_COL[1], data[0].name);
 		content.put(ExamDataSource.NAME_COL[2], data[0].date);
 		content.put(ExamDataSource.NAME_COL[3], data[0].assignedPag);
@@ -139,7 +139,7 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		content.put(ExamDataSource.NAME_COL[1], data[1].name);
 		content.put(ExamDataSource.NAME_COL[2], data[1].date);
 		
-		db.insert(content);
+		db.insert(content);*/
 	}
 	
 	private DataSubject[] data = new DataSubject[]{
