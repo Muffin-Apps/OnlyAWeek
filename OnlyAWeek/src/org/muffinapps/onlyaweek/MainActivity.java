@@ -45,7 +45,7 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		setContentView(R.layout.activity_main);
 		
 		db = new ExamDataSource(this);
-		//insert();
+		insert();
 		
 		adapterExamPrepar = new CustomCursorAdapter(this, db.getExamPreparation(), false);
 		adapterExam = new ExamCursorAdapter(this, db.getAllExam(), false);
@@ -78,8 +78,18 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	        case R.id.action_add:
-	            Intent intent = new Intent(this, AddNewExamActivity.class);
-	            startActivity(intent);
+	        	View view = findViewById(R.id.add_exam_content_frame);
+	        	if(view == null){
+	        		Intent intent = new Intent(this, AddNewExamActivity.class);
+		            startActivity(intent);
+	        	}else{
+	        		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+	        		AddNewExamFragment addFragment = new AddNewExamFragment();
+	        		fragmentTransaction.replace(R.id.add_exam_content_frame, addFragment);
+	        		fragmentTransaction.commit();
+	        		
+	        	}
+	            
 	            return true;
 	        case R.id.action_sort:
 	        	//TODO
