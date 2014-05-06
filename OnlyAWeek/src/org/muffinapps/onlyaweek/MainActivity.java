@@ -31,8 +31,6 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 	
 	private ActionMode actionMode;
 	private ExamDataSource dataBase;
-	private CustomCursorAdapter adapterExamPrepar;
-	private ExamCursorAdapter adapterExam;
 	private ListFragment currentListFragment;
 	private ExamListFragment allListFragment, preparingListFragment, notPreparingListFragment;
 	private int numItemsSelected;
@@ -45,10 +43,7 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		setContentView(R.layout.activity_main);
 		
 		dataBase = ((OnlyAWeekApplication) this.getApplicationContext()).getDataBase();
-		
-		adapterExamPrepar = new CustomCursorAdapter(this, dataBase.getExamPreparation(), false);
-		adapterExam = new ExamCursorAdapter(this, dataBase.getAllExam(), false);
-		
+	
 		
 		String[] listnames = getResources().getStringArray(R.array.lists_titles);
 		ArrayAdapter<String> aAdpt = new ArrayAdapter<String>(this,
@@ -60,12 +55,20 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 
 		actionBar.setListNavigationCallbacks(aAdpt, this);
 		
-		currentContent = PREPARING_LIST;
+		if(savedInstanceState != null){
+			currentContent = savedInstanceState.getInt("currentContent", PREPARING_LIST);	
+		}else{
+			currentContent = PREPARING_LIST;
+		}
 		
 		setContent();
 	}
 
-	
+	@Override
+	public void onSaveInstanceState(Bundle saveInstanceState){
+		super.onSaveInstanceState(saveInstanceState);		
+		saveInstanceState.putInt("currentContent", currentContent);
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
