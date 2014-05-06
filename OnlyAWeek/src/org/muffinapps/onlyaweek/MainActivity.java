@@ -30,7 +30,7 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 			ALL_LIST = 2;
 	
 	private ActionMode actionMode;
-	private ExamDataSource db;
+	private ExamDataSource dataBase;
 	private CustomCursorAdapter adapterExamPrepar;
 	private ExamCursorAdapter adapterExam;
 	private ListFragment currentListFragment;
@@ -44,11 +44,10 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		db = new ExamDataSource(this);
-		insert();
+		dataBase = ((OnlyAWeekApplication) this.getApplicationContext()).getDataBase();
 		
-		adapterExamPrepar = new CustomCursorAdapter(this, db.getExamPreparation(), false);
-		adapterExam = new ExamCursorAdapter(this, db.getAllExam(), false);
+		adapterExamPrepar = new CustomCursorAdapter(this, dataBase.getExamPreparation(), false);
+		adapterExam = new ExamCursorAdapter(this, dataBase.getAllExam(), false);
 		
 		
 		String[] listnames = getResources().getStringArray(R.array.lists_titles);
@@ -115,29 +114,6 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		}
 	}
 	
-	public void insert(){
-		/*ContentValues content = new ContentValues();
-		content.put(ExamDataSource.NAME_COL[1], data[0].name);
-		content.put(ExamDataSource.NAME_COL[2], data[0].date);
-		content.put(ExamDataSource.NAME_COL[3], data[0].assignedPag);
-		content.put(ExamDataSource.NAME_COL[4], data[0].remainingPag);
-		content.put(ExamDataSource.NAME_COL[5], data[0].totalPag);
-		
-		db.insert(content);
-		
-		content.clear();
-		
-		content.put(ExamDataSource.NAME_COL[1], data[1].name);
-		content.put(ExamDataSource.NAME_COL[2], data[1].date);
-		
-		db.insert(content);*/
-	}
-	
-	private DataSubject[] data = new DataSubject[]{
-			new DataSubject("Dispositivos Moviles", "05/06/2014", 1200, 80, 2),
-			new DataSubject("DIU", "20/06/2014", 0, 0, 0),
-			};
-
 	@Override
 	public boolean onActionItemClicked(ActionMode arg0, MenuItem item) {
 		switch(item.getItemId()){
@@ -241,21 +217,21 @@ public class MainActivity extends FragmentActivity implements AbsListView.MultiC
 		case PREPARING_LIST:
 			if(preparingListFragment == null){
 				preparingListFragment = new ExamListFragment();
-				preparingListFragment.setListAdapter(new CustomCursorAdapter(this, db.getExamPreparation(), false));
+				preparingListFragment.setListAdapter(new CustomCursorAdapter(this, dataBase.getExamPreparation(), false));
 			}
 			listFragment = preparingListFragment;
 			break;
 		case NO_PREPARING_LIST:
 			if(notPreparingListFragment == null){
 				notPreparingListFragment = new ExamListFragment();
-				notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this, db.getExamNotPreparation(), false));
+				notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this, dataBase.getExamNotPreparation(), false));
 			}
 			listFragment = notPreparingListFragment;
 			break;
 		case ALL_LIST:
 			if(allListFragment == null){
 				allListFragment = new ExamListFragment();
-				allListFragment.setListAdapter(new ExamCursorAdapter(this, db.getAllExam(), false));
+				allListFragment.setListAdapter(new ExamCursorAdapter(this, dataBase.getAllExam(), false));
 			}
 			listFragment = allListFragment;
 			break;

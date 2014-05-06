@@ -11,15 +11,17 @@ import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
+public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnDateSetListener, OnClickListener{
 	private EditText name;
 	private TextView date;
 	private OnConfirmListener listener;
+	private Calendar cal;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstance){
@@ -30,8 +32,7 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	@Override
 	public void onActivityCreated(Bundle state){
 		super.onActivityCreated(state);
-		name = (EditText) getView().findViewById(R.id.addExamName);
-		date = (TextView) getView().findViewById(R.id.addExamDate);
+		
 		date.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -41,14 +42,18 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 			}
 		});
 		
+		getView().findViewById(R.id.buttonAddNewExam).setOnClickListener(this);
 	}
 	
 	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
-		Calendar cal = new GregorianCalendar(year, monthOfYear, dayOfMonth);
-		DateFormat f = new DateFormat();
-		date.setText(f.format("dd/M/yyyy", cal.getTime()));
+		if(cal == null)
+			cal = new GregorianCalendar(year, monthOfYear, dayOfMonth);
+		else
+			cal.set(year, monthOfYear, dayOfMonth);
+		
+		date.setText(DateFormat.format("dd/M/yyyy", cal.getTime()));
 	}
 	
 	public void setOnConfirmListener(OnConfirmListener l){
@@ -60,7 +65,16 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	}
 	
 	public interface OnConfirmListener{
-		public void onAdd();
+		public void onAdd(String name, Calendar date, int totalPages);
 		public void onEdit();
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		String name = ((EditText) getView().findViewById(R.id.addExamName)).getText().toString();
+		int totalPages = Integer.parseInt(((EditText) getView().findViewById(R.id.totalPag)).getText().toString());
+		
+		listener.onAdd(name, cal, totalPages);
 	}
 }

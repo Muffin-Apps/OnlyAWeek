@@ -1,6 +1,9 @@
 package org.muffinapps.onlyaweek;
 
+import java.util.Calendar;
+
 import org.muffinapps.onlyaweek.AddNewExamFragment.OnConfirmListener;
+import org.muffinapps.onlyaweek.database.ExamDataSource;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -14,6 +17,7 @@ import android.view.ViewGroup;
 import android.os.Build;
 
 public class AddNewExamActivity extends FragmentActivity implements OnConfirmListener{
+	private ExamDataSource dataBase;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +33,12 @@ public class AddNewExamActivity extends FragmentActivity implements OnConfirmLis
 	}
 
 	@Override
-	public void onAdd() {
+	public void onAdd(String name, Calendar date, int totalPages) {
 		// TODO Auto-generated method stub
+		if(dataBase == null)
+			dataBase = ((OnlyAWeekApplication) getApplicationContext()).getDataBase();
 		
+		dataBase.insertNewExam(name, date, totalPages);
 	}
 
 	@Override

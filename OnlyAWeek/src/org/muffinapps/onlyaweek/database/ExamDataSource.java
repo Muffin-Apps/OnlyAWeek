@@ -1,5 +1,8 @@
 package org.muffinapps.onlyaweek.database;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,8 +13,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ExamDataSource{
 	private static final String NAME_DB = "exams_db";
 	public static final String NAME_TABLE = "exams";
-	private static final int VERSION = 2;
-	public static final String [] NAME_COL = {"_id", "name", "date", "remainingPag", "totalPag"};
+	private static final int VERSION = 3;
+	public static final String [] NAME_COL = {"_id", "name", "date", "remainingPag", "totalPag", "preparing"};
 	
 	private SQLiteDatabase db;
     private ExamSQLiteHelper dbExamSqliteHelper;
@@ -40,11 +43,13 @@ public class ExamDataSource{
         }
     }
 	
-	public void insertNewExam(String name, String date, int totalPag){
+	public void insertNewExam(String name, Calendar date, int totalPag){
 		ContentValues content = new ContentValues();
 		content.put(ExamDataSource.NAME_COL[1], name);
-		content.put(ExamDataSource.NAME_COL[2], date);
+		content.put(ExamDataSource.NAME_COL[2], date.getTimeInMillis());
+		content.put(ExamDataSource.NAME_COL[3], totalPag);
 		content.put(ExamDataSource.NAME_COL[4], totalPag);
+		content.put(ExamDataSource.NAME_COL[5], 0);
 		
 		db.insert(NAME_TABLE, null, content);
 	}
@@ -73,7 +78,7 @@ public class ExamDataSource{
 	public Cursor getExamPreparation(){
 		Cursor c = null;
 		
-		c = db.query(NAME_TABLE, NAME_COL, NAME_COL[5] + " IS NOT NULL", null, null, null, null);
+		c = db.query(NAME_TABLE, NAME_COL, NAME_COL[5] + " = 1", null, null, null, null);
 		
 		c.moveToFirst();
 		
@@ -84,7 +89,7 @@ public class ExamDataSource{
 		Cursor c = null;
 		String [] col = {NAME_COL[0], NAME_COL[1], NAME_COL[2]};
 		
-		c = db.query(NAME_TABLE, col, NAME_COL[5] + " IS NULL", null, null, null, null);
+		c = db.query(NAME_TABLE, col, NAME_COL[5] + " = 0", null, null, null, null);
 		
 		c.moveToFirst();
 		
@@ -118,12 +123,12 @@ public class ExamDataSource{
 	private static class ExamSQLiteHelper extends SQLiteOpenHelper{
 		private static final String DB_CREATE="CREATE TABLE " + NAME_TABLE +
                 " ("+
-                NAME_COL[0] + " LONG PRIMARY KEY, " +
+                NAME_COL[0] + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 NAME_COL[1] + " TEXT NOT NULL, " +  
-                NAME_COL[2] + " TEXT NOT NULL, " +
-                NAME_COL[3] + " INTEGER , " +
-                NAME_COL[4] + " INTEGER , " +
-                NAME_COL[5] + " INTEGER );";
+                NAME_COL[2] + " LONG NOT NULL, " +
+                NAME_COL[3] + " INTEGER NOT NULL, " +
+                NAME_COL[4] + " INTEGER NOT NULL, " +
+                NAME_COL[5] + " INTEGER NOT NULL);";
 
 		public ExamSQLiteHelper(Context context, String name,
 				CursorFactory factory, int version) {
