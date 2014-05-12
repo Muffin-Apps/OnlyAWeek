@@ -1,5 +1,6 @@
 package org.muffinapps.onlyaweek;
 
+import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.widget.AdapterView.OnItemLongClickListener;
 
@@ -7,8 +8,8 @@ public class ExamListFragment extends ListFragment {
 	private OnItemLongClickListener listener;
 	
 	@Override
-	public void onResume(){
-		super.onResume();
+	public void onActivityCreated(Bundle savedInstanceState){
+		super.onActivityCreated(savedInstanceState);
 		if(listener != null)
 			getListView().setOnItemLongClickListener(listener);
 	}
