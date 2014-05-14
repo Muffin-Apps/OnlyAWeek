@@ -21,11 +21,11 @@ public class ExamCursorAdapter extends CursorAdapter{
 	}
 
 	@Override
-	public View newView(Context context, Cursor cursor, ViewGroup view) {
-		LayoutInflater inflater = LayoutInflater.from(view.getContext());
-        View retView = inflater.inflate(R.layout.exam, view, false);
+	public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
+		LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.exam, null, false);
  
-        return retView;
+        return view;
 	}
 
 	@Override

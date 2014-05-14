@@ -1,5 +1,8 @@
 package org.muffinapps.onlyaweek;
 
+import java.util.List;
+
+import org.muffinapps.onlyaweek.ExamListFragment.ExamActionListener;
 import org.muffinapps.onlyaweek.database.CustomCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamDataSource;
@@ -16,7 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
-public class MainActivity extends FragmentActivity implements OnNavigationListener{
+public class MainActivity extends FragmentActivity implements OnNavigationListener, ExamActionListener{
 	private static final int PREPARING_LIST = 0,
 			NO_PREPARING_LIST = 1,
 			ALL_LIST = 2;
@@ -136,14 +139,15 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 			if(preparingListFragment == null){
 				preparingListFragment = new ExamListFragment();
 				preparingListFragment.setListAdapter(new CustomCursorAdapter(this, dataBase.getExamPreparation(), false));
+				preparingListFragment.setExamActionListener(this);
 			}
 			listFragment = preparingListFragment;
 			break;
 		case NO_PREPARING_LIST:
 			if(notPreparingListFragment == null){
 				notPreparingListFragment = new ExamListFragment();
-				//notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this, dataBase.getExamNotPreparation(), false));
-				notPreparingListFragment.setListAdapter(new CustomCursorAdapter(this, dataBase.getExamNotPreparation(), false));
+				notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this, dataBase.getExamNotPreparation(), false));
+				notPreparingListFragment.setExamActionListener(this);
 			}
 			listFragment = notPreparingListFragment;
 			break;
@@ -151,6 +155,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 			if(allListFragment == null){
 				allListFragment = new ExamListFragment();
 				allListFragment.setListAdapter(new ExamCursorAdapter(this, dataBase.getAllExam(), false));
+				allListFragment.setExamActionListener(this);
 			}
 			listFragment = allListFragment;
 			break;
@@ -160,5 +165,22 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		fragmentTransaction.replace(R.id.main_content_frame, listFragment);
 		fragmentTransaction.commit();
+	}
+
+	@Override
+	public void onExamClick(long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onExamEdit(long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onExamsDelete(long[] idList) {
+		dataBase.deleteExams(idList);
 	}
 }
