@@ -33,6 +33,8 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	public void onActivityCreated(Bundle state){
 		super.onActivityCreated(state);
 		
+		date = (TextView) getView().findViewById(R.id.addExamDate);
+		
 		date.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -73,7 +75,7 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		String name = ((EditText) getView().findViewById(R.id.addExamName)).getText().toString();
-		int totalPages = Integer.parseInt(((EditText) getView().findViewById(R.id.totalPag)).getText().toString());
+		int totalPages = Integer.parseInt(((EditText) getView().findViewById(R.id.addExamPages)).getText().toString());
 		
 		listener.onAdd(name, cal, totalPages);
 	}

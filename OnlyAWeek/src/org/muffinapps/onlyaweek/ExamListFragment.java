@@ -1,30 +1,129 @@
 package org.muffinapps.onlyaweek;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fortysevendeg.swipelistview.SwipeListView;
+import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.widget.AdapterView.OnItemLongClickListener;
+import android.support.v4.widget.CursorAdapter;
+import android.view.ActionMode;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 public class ExamListFragment extends ListFragment {
-	private OnItemLongClickListener listener;
+	private ExamActionListener actionListener;
+	
+	public void setExamActionListener(ExamActionListener listener){
+		actionListener = listener;
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle args){
+		return inflater.inflate(R.layout.list_exam, null);
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		if(listener != null)
-			getListView().setOnItemLongClickListener(listener);
+		ExamListListener examListener;
+		SwipeListView swipeListView = (SwipeListView) getListView();
+		
+		swipeListView.setSwipeActionLeft(SwipeListView.SWIPE_ACTION_CHOICE);
+		swipeListView.setSwipeOpenOnLongPress(false);
+		
+		examListener = new ExamListListener(this, swipeListView, actionListener);
+		
+		swipeListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+			swipeListView.setMultiChoiceModeListener(examListener);
+		
+		swipeListView.setSwipeListViewListener(examListener);
+		swipeListView.setOnItemClickListener(examListener);
 	}
-
-	/**
-	 * @return the listener
-	 */
-	public OnItemLongClickListener getLongClickListener() {
-		return listener;
+	
+	public static interface ExamActionListener{
+		 public void onExamClick(long id);
+		  
+		 public void onExamEdit(long id);
+		 
+		 public void onExamsDelete(long[] id);
 	}
+	
+	public static class ExamListListener extends BaseSwipeListViewListener implements AbsListView.MultiChoiceModeListener, OnItemClickListener{
+		private SwipeListView swipeListView;
+		private ListFragment examListFragment;
+		private ExamActionListener examActionListener;
+		
+		public ExamListListener(ListFragment fragment, SwipeListView listView, ExamActionListener lstn){
+			examListFragment = fragment;
+			swipeListView = listView;
+			examActionListener = lstn;
+		}
+		
+		@Override
+		public void onOpened(int position, boolean toRight) {
+			swipeListView.closeOpenedItems();
+			// TODO Lamar al actionListener.onExamEdit()
+		}
 
-	/**
-	 * @param listener the listener to set
-	 */
-	public void setLongClickListener(OnItemLongClickListener listener) {
-		this.listener = listener;
+		@Override
+		public void onItemCheckedStateChanged(ActionMode mode, int position,
+				long id, boolean checked) {
+			mode.setTitle("Selecionado/s (" + swipeListView.getCountSelected() + ")");
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.action_delete:
+				CursorAdapter adapter = (CursorAdapter) examListFragment.getListAdapter();
+				List<Integer> position = swipeListView.getPositionsSelected();
+				int n = position.size();
+				long[] ids = new long[n];
+				
+				for(int i=0; i<n; i++)
+					ids[i] = adapter.getItemId(position.get(i));
+				
+				mode.finish();
+				
+				examActionListener.onExamsDelete(ids);
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.main_context, menu);
+			return true;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			swipeListView.unselectedChoiceStates();
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false;
+		}
+
+		@Override
+		public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+			// TODO Lamar al actionListener.onExamClick()
+		}
 	}
 }

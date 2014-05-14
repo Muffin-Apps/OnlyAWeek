@@ -24,14 +24,14 @@ public class CustomCursorAdapter extends CursorAdapter{
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup view) {
 		LayoutInflater inflater = LayoutInflater.from(view.getContext());
-        View retView = inflater.inflate(R.layout.subject, view, false);
- 
+       // View retView = inflater.inflate(R.layout.subject, view, false);
+		View retView = inflater.inflate(R.layout.list_exam_item, view, false);
         return retView;
 	}
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-	
+	/*
 		TextView name = (TextView) view.findViewById(R.id.nameSubject);
 		name.setText(cursor.getString(1));
 		
@@ -47,7 +47,7 @@ public class CustomCursorAdapter extends CursorAdapter{
 		assignedPag.setText(cursor.getString(4));
 		
 		TextView totalPag = (TextView) view.findViewById(R.id.totalPag);
-		totalPag.setText(cursor.getString(5));
+		totalPag.setText(cursor.getString(5));*/
 	}
 
 }

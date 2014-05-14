@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:layout_height="match_parent"
+    >
+        <LinearLayout
+        android:id = "@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E3E3E3"
+        android:tag="back" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Editar"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+    
+<LinearLayout
+    android:id = "@+id/front"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:tag="front">
 
     <TextView
         android:id="@+id/nameExam"
@@ -19,3 +44,4 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>
+</FrameLayout>
