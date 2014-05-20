@@ -30,7 +30,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	private ExamListFragment allListFragment, preparingListFragment, notPreparingListFragment;
 	
 	private int currentListContent;
-	private QueryExam queryExam;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +57,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		
 		setListContent();
 		
-		queryExam = new QueryExam(dataBase);
 	}
 
 	@Override
@@ -146,7 +144,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 				QueryExam queryPreparExam = new QueryExam(dataBase);
 				queryPreparExam.setTypeQuery(QueryExam.EXAM_PREPARATION);
 				
-				preparingListFragment.setQuery(queryExam);
+				preparingListFragment.setQuery(queryPreparExam);
 				preparingListFragment.setListAdapter(new CustomCursorAdapter(this));
 				preparingListFragment.setExamActionListener(this);
 			}
@@ -157,7 +155,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 				notPreparingListFragment = new ExamListFragment();
 				QueryExam queryNotPrepar = new QueryExam(dataBase);
 				queryNotPrepar.setTypeQuery(QueryExam.EXAM_NOT_PREPARATION);
-				preparingListFragment.setQuery(queryExam);
+				preparingListFragment.setQuery(queryNotPrepar);
 				
 				notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this));
 				notPreparingListFragment.setExamActionListener(this);
@@ -169,6 +167,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 				allListFragment = new ExamListFragment();
 				QueryExam queryAllExam = new QueryExam(dataBase);
 				queryAllExam.setTypeQuery(QueryExam.ALL_EXAM);
+				preparingListFragment.setQuery(queryAllExam);
+				
 				allListFragment.setListAdapter(new ExamCursorAdapter(this));
 				allListFragment.setExamActionListener(this);
 			}
