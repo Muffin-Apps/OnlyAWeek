@@ -3,10 +3,17 @@ package org.muffinapps.onlyaweek;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.emud.content.Query;
+import org.emud.support.v4.content.ObserverCursorLoader;
+import org.muffinapps.onlyaweek.database.ExamDataSource;
+
 import android.app.DatePickerDialog;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,20 +23,17 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnDateSetListener, OnClickListener{
+public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnDateSetListener, OnClickListener, LoaderCallbacks<Cursor>{
 	private static final String ID_KEY = "id", NAME_KEY = "name", DATE_KEY = "date", PAGES_KEY = "pages";
 	private long id = -1;
 	private TextView date;
 	private OnConfirmListener listener;
 	private Calendar cal;
 	
-	public static Bundle getArgsAsBundle(long id, String name, Calendar date, int totalpages){
+	public static Bundle getArgsAsBundle(long id){
 		Bundle bundle = new Bundle();
 		
 		bundle.putLong(ID_KEY, id);
-		bundle.putString(NAME_KEY, name);
-		bundle.putLong(DATE_KEY, date.getTimeInMillis());
-		bundle.putInt(PAGES_KEY, totalpages);
 		
 		return bundle;
 	}
@@ -60,11 +64,7 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		
 		if(args != null){
 			id = args.getLong(ID_KEY, -1);
-			((EditText) getView().findViewById(R.id.addExamName)).setText(args.getString(NAME_KEY));
-			GregorianCalendar cal = new GregorianCalendar();
-			cal.setTimeInMillis(args.getLong(DATE_KEY));
-			date.setText(DateFormat.format("dd/M/yyyy", cal.getTime()));
-			((EditText) getView().findViewById(R.id.addExamPages)).setText("" + args.getInt(PAGES_KEY));
+			getLoaderManager().initLoader(0, null, this);
 		}
 		
 		
@@ -86,10 +86,6 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		listener = l;
 	}
 	
-	public void mostrarDetalle(String texto){
-		
-	}
-	
 	public interface OnConfirmListener{
 		public void onAdd(String name, Calendar date, int totalPages);
 		public void onEdit(long id, String name, Calendar date, int totalPages);
@@ -105,5 +101,33 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		}else{
 			listener.onEdit(id, name, cal, totalPages);
 		}
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+		final ExamDataSource ds = ((OnlyAWeekApplication) getActivity().getApplicationContext()).getDataBase();
+		
+		Query<Cursor> query = new Query<Cursor>(){
+			@Override
+			public Cursor execute() {
+				return ds.getExam(id);
+			}
+		};
+		
+		return new ObserverCursorLoader(getActivity(), query);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
+		((EditText) getView().findViewById(R.id.addExamName)).setText(cursor.getString(cursor.getColumnIndex(ExamDataSource.NAME_COL[1])));
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(ExamDataSource.NAME_COL[2])));
+		date.setText(DateFormat.format("dd/M/yyyy", cal.getTime()));
+		((EditText) getView().findViewById(R.id.addExamPages)).setText("" + cursor.getInt(cursor.getColumnIndex(ExamDataSource.NAME_COL[4])));
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		
 	}
 }

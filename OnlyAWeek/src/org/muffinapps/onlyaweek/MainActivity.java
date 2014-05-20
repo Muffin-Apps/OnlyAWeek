@@ -190,8 +190,10 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 
 	@Override
 	public void onExamEdit(long id) {
-		// TODO Auto-generated method stub
-		
+		Intent intent = new Intent(this, AddNewExamActivity.class);
+		intent.setAction(Intent.ACTION_EDIT);
+		intent.putExtras(AddNewExamFragment.getArgsAsBundle(id));
+        startActivity(intent);
 	}
 
 	@Override

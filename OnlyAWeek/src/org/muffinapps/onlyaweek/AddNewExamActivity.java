@@ -20,8 +20,9 @@ public class AddNewExamActivity extends FragmentActivity implements OnConfirmLis
 		
 		AddNewExamFragment addFragment = new AddNewExamFragment();
 		Intent intent = getIntent();
+		String action = intent.getAction(); 
 		
-		if(intent.getAction().equals(Intent.ACTION_EDIT)){
+		if(action != null && action.equals(Intent.ACTION_EDIT)){
 			addFragment.setArguments(intent.getExtras());
 		}
 		
