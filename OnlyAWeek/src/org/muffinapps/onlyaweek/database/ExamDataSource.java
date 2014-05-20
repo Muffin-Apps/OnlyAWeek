@@ -27,6 +27,8 @@ public class ExamDataSource{
 	public ExamDataSource(Context context){
 		dbExamSqliteHelper = new ExamSQLiteHelper(context, NAME_DB, null, VERSION);
 		openDBModeWriter();
+		
+		subject = new DataSubject();
 	}
 	
 	private void openDBModeWriter(){
