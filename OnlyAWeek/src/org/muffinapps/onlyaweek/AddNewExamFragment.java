@@ -73,7 +73,6 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		String name = ((EditText) getView().findViewById(R.id.addExamName)).getText().toString();
 		int totalPages = Integer.parseInt(((EditText) getView().findViewById(R.id.addExamPages)).getText().toString());
 		
