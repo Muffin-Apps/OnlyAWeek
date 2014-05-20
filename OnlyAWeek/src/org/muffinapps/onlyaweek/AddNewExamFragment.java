@@ -63,6 +63,7 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		Bundle args = getArguments();
 		
 		if(args != null){
+			android.util.Log.d("ANEF", "agrs != null");
 			id = args.getLong(ID_KEY, -1);
 			getLoaderManager().initLoader(0, null, this);
 		}
@@ -96,7 +97,10 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		String name = ((EditText) getView().findViewById(R.id.addExamName)).getText().toString();
 		int totalPages = Integer.parseInt(((EditText) getView().findViewById(R.id.addExamPages)).getText().toString());
 		
+		android.util.Log.d("ANEF", "onClick");
+		
 		if(id == -1){
+			android.util.Log.d("ANEF", "onAdd");
 			listener.onAdd(name, cal, totalPages);
 		}else{
 			listener.onEdit(id, name, cal, totalPages);

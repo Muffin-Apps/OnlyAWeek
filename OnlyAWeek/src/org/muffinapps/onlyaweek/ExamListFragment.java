@@ -36,6 +36,18 @@ public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cu
 		actionListener = listener;
 	}
 	
+	public void setQuery(Query<Cursor> q){
+		query = q;
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		
+		if(query != null)
+			getLoaderManager().initLoader(0, null, this);
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle args){
 		return inflater.inflate(R.layout.list_exam, null);
@@ -58,9 +70,6 @@ public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cu
 		
 		swipeListView.setSwipeListViewListener(examListener);
 		swipeListView.setOnItemClickListener(examListener);
-		
-		if(query != null)
-			getLoaderManager().initLoader(0, null, this);
 	}
 	
 	public static interface ExamActionListener{
@@ -136,10 +145,6 @@ public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cu
 		public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 			// TODO Lamar al actionListener.onExamClick()
 		}
-	}
-	
-	public void setQuery(Query<Cursor> q){
-		query = q;
 	}
 	
 	@Override
