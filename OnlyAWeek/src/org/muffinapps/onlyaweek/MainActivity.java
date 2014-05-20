@@ -155,7 +155,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 				notPreparingListFragment = new ExamListFragment();
 				QueryExam queryNotPrepar = new QueryExam(dataBase);
 				queryNotPrepar.setTypeQuery(QueryExam.EXAM_NOT_PREPARATION);
-				preparingListFragment.setQuery(queryNotPrepar);
+				notPreparingListFragment.setQuery(queryNotPrepar);
 				
 				notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this));
 				notPreparingListFragment.setExamActionListener(this);
@@ -167,7 +167,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 				allListFragment = new ExamListFragment();
 				QueryExam queryAllExam = new QueryExam(dataBase);
 				queryAllExam.setTypeQuery(QueryExam.ALL_EXAM);
-				preparingListFragment.setQuery(queryAllExam);
+				allListFragment.setQuery(queryAllExam);
 				
 				allListFragment.setListAdapter(new ExamCursorAdapter(this));
 				allListFragment.setExamActionListener(this);
