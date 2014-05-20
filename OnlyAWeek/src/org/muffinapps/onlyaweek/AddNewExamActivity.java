@@ -39,6 +39,7 @@ public class AddNewExamActivity extends FragmentActivity implements OnConfirmLis
 			dataBase = ((OnlyAWeekApplication) getApplicationContext()).getDataBase();
 		
 		dataBase.insertNewExam(name, date, totalPages);
+		this.finish();
 	}
 
 	@Override

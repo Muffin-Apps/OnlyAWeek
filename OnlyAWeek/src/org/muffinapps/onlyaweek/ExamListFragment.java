@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.emud.content.Query;
 import org.emud.support.v4.content.ObserverCursorLoader;
+import org.muffinapps.onlyaweek.database.ExamDataSource;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
@@ -150,7 +151,7 @@ public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cu
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 		
-		return new ObserverCursorLoader( getActivity(), query);
+		return new ObserverCursorLoader( getActivity(), query, ((OnlyAWeekApplication) getActivity().getApplicationContext()).getDataBase().getSubject());
 	}
 
 	@Override

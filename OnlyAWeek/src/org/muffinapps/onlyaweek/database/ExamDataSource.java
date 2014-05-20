@@ -3,6 +3,9 @@ package org.muffinapps.onlyaweek.database;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.emud.content.DataSubject;
+import org.emud.content.observer.Observer;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,6 +21,8 @@ public class ExamDataSource{
 	
 	private SQLiteDatabase db;
     private ExamSQLiteHelper dbExamSqliteHelper;
+    
+    private DataSubject subject;
     
 	public ExamDataSource(Context context){
 		dbExamSqliteHelper = new ExamSQLiteHelper(context, NAME_DB, null, VERSION);
@@ -52,6 +57,8 @@ public class ExamDataSource{
 		content.put(ExamDataSource.NAME_COL[5], 0);
 		
 		db.insert(NAME_TABLE, null, content);
+		
+		notifyObservers();
 	}
 	
 	public Cursor getExam(long id){
@@ -117,6 +124,8 @@ public class ExamDataSource{
 		
 		
 		db.delete(NAME_TABLE, NAME_COL[0] + " IN (" + builder.toString() + ")", null);
+		
+		notifyObservers();
 	}
 	
 	
@@ -148,5 +157,21 @@ public class ExamDataSource{
 		}
 
 		
+	}
+	
+	public DataSubject getSubject(){
+		return subject;
+	}
+	
+	public void registerObserver(Observer o){
+		subject.registerObserver(o);
+	}
+	
+	public void unregisterObserver(Observer o){
+		subject.unregisterObserver(o);
+	}
+	
+	public void notifyObservers(){
+		subject.notifyObservers();
 	}
 }
