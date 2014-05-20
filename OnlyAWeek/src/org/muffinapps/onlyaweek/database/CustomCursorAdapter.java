@@ -17,8 +17,8 @@ import android.widget.TextView;
 public class CustomCursorAdapter extends CursorAdapter{
 
 
-	public CustomCursorAdapter(Context context, Cursor c, boolean autoRequery) {
-		super(context, c, autoRequery);
+	public CustomCursorAdapter(Context context, boolean autoRequery) {
+		super(context, null, autoRequery);
 	}
 
 	@Override

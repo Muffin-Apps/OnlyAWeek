@@ -2,10 +2,12 @@ package org.muffinapps.onlyaweek;
 
 import java.util.List;
 
+import org.emud.content.Query;
 import org.muffinapps.onlyaweek.ExamListFragment.ExamActionListener;
 import org.muffinapps.onlyaweek.database.CustomCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamDataSource;
+import org.muffinapps.onlyaweek.database.QueryExam;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -28,6 +30,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	private ExamListFragment allListFragment, preparingListFragment, notPreparingListFragment;
 	
 	private int currentListContent;
+	private QueryExam queryExam;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		}
 		
 		setListContent();
+		
+		queryExam = new QueryExam(dataBase);
 	}
 
 	@Override
@@ -138,7 +143,11 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		case PREPARING_LIST:
 			if(preparingListFragment == null){
 				preparingListFragment = new ExamListFragment();
-				preparingListFragment.setListAdapter(new CustomCursorAdapter(this, dataBase.getExamPreparation(), false));
+				QueryExam queryPreparExam = new QueryExam(dataBase);
+				queryPreparExam.setTypeQuery(QueryExam.EXAM_PREPARATION);
+				
+				preparingListFragment.setQuery(queryExam);
+				preparingListFragment.setListAdapter(new CustomCursorAdapter(this, false));
 				preparingListFragment.setExamActionListener(this);
 			}
 			listFragment = preparingListFragment;
@@ -146,6 +155,10 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		case NO_PREPARING_LIST:
 			if(notPreparingListFragment == null){
 				notPreparingListFragment = new ExamListFragment();
+				QueryExam queryNotPrepar = new QueryExam(dataBase);
+				queryNotPrepar.setTypeQuery(QueryExam.EXAM_NOT_PREPARATION);
+				preparingListFragment.setQuery(queryExam);
+				
 				notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this, dataBase.getExamNotPreparation(), false));
 				notPreparingListFragment.setExamActionListener(this);
 			}
@@ -154,6 +167,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		case ALL_LIST:
 			if(allListFragment == null){
 				allListFragment = new ExamListFragment();
+				QueryExam queryAllExam = new QueryExam(dataBase);
+				queryAllExam.setTypeQuery(QueryExam.ALL_EXAM);
 				allListFragment.setListAdapter(new ExamCursorAdapter(this, dataBase.getAllExam(), false));
 				allListFragment.setExamActionListener(this);
 			}
@@ -183,4 +198,5 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	public void onExamsDelete(long[] idList) {
 		dataBase.deleteExams(idList);
 	}
+
 }

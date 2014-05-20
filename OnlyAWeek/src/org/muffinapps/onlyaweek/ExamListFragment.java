@@ -3,11 +3,18 @@ package org.muffinapps.onlyaweek;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.emud.content.Query;
+import org.emud.support.v4.content.ObserverCursorLoader;
+
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
+
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -21,8 +28,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class ExamListFragment extends ListFragment {
+public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cursor>{
 	private ExamActionListener actionListener;
+	private Query<Cursor> query;
 	
 	public void setExamActionListener(ExamActionListener listener){
 		actionListener = listener;
@@ -50,6 +58,9 @@ public class ExamListFragment extends ListFragment {
 		
 		swipeListView.setSwipeListViewListener(examListener);
 		swipeListView.setOnItemClickListener(examListener);
+		
+		if(query != null)
+			getLoaderManager().initLoader(0, null, this);
 	}
 	
 	public static interface ExamActionListener{
@@ -125,5 +136,27 @@ public class ExamListFragment extends ListFragment {
 		public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 			// TODO Lamar al actionListener.onExamClick()
 		}
+	}
+	
+	public void setQuery(Query<Cursor> q){
+		query = q;
+	}
+	
+	@Override
+	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+		
+		return new ObserverCursorLoader( getActivity(), query);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+		
+		((CursorAdapter) getListAdapter()).swapCursor(arg1);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		
+		((CursorAdapter) getListAdapter()).swapCursor(null);
 	}
 }
