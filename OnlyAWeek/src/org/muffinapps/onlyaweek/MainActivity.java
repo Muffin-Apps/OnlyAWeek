@@ -147,7 +147,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 				queryPreparExam.setTypeQuery(QueryExam.EXAM_PREPARATION);
 				
 				preparingListFragment.setQuery(queryExam);
-				preparingListFragment.setListAdapter(new CustomCursorAdapter(this, false));
+				preparingListFragment.setListAdapter(new CustomCursorAdapter(this));
 				preparingListFragment.setExamActionListener(this);
 			}
 			listFragment = preparingListFragment;
@@ -159,7 +159,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 				queryNotPrepar.setTypeQuery(QueryExam.EXAM_NOT_PREPARATION);
 				preparingListFragment.setQuery(queryExam);
 				
-				notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this, dataBase.getExamNotPreparation(), false));
+				notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this));
 				notPreparingListFragment.setExamActionListener(this);
 			}
 			listFragment = notPreparingListFragment;
@@ -169,7 +169,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 				allListFragment = new ExamListFragment();
 				QueryExam queryAllExam = new QueryExam(dataBase);
 				queryAllExam.setTypeQuery(QueryExam.ALL_EXAM);
-				allListFragment.setListAdapter(new ExamCursorAdapter(this, dataBase.getAllExam(), false));
+				allListFragment.setListAdapter(new ExamCursorAdapter(this));
 				allListFragment.setExamActionListener(this);
 			}
 			listFragment = allListFragment;
