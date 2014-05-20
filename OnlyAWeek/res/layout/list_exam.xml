@@ -13,7 +13,8 @@
         swipe:swipeFrontView="@+id/front"
         swipe:swipeBackView="@+id/back" 
         swipe:swipeCloseAllItemsWhenMoveList="true"
-        swipe:swipeMode="both"/>
-        <!-- swipe:swipeDrawableChecked="@drawable/choice_selected" swipe:swipeDrawableUnchecked="@drawable/choice_unselected" -->
+        swipe:swipeMode="both"
+        swipe:swipeDrawableChecked="@drawable/choice_selected"
+        swipe:swipeDrawableUnchecked="@drawable/choice_unselected"/>
 
 </LinearLayout>

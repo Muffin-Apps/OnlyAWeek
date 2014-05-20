@@ -95,7 +95,7 @@ public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cu
 		@Override
 		public void onOpened(int position, boolean toRight) {
 			swipeListView.closeOpenedItems();
-			// TODO Lamar al actionListener.onExamEdit()
+			examActionListener.onExamEdit(swipeListView.getAdapter().getItemId(position));
 		}
 
 		@Override
