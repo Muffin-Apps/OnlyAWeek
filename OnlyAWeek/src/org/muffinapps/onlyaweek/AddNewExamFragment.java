@@ -2,7 +2,6 @@ package org.muffinapps.onlyaweek;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -18,15 +17,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnDateSetListener, OnClickListener{
-	private EditText name;
+	private static final String ID_KEY = "id", NAME_KEY = "name", DATE_KEY = "date", PAGES_KEY = "pages";
+	private long id = -1;
 	private TextView date;
 	private OnConfirmListener listener;
 	private Calendar cal;
 	
+	public static Bundle getArgsAsBundle(long id, String name, Calendar date, int totalpages){
+		Bundle bundle = new Bundle();
+		
+		bundle.putLong(ID_KEY, id);
+		bundle.putString(NAME_KEY, name);
+		bundle.putLong(DATE_KEY, date.getTimeInMillis());
+		bundle.putInt(PAGES_KEY, totalpages);
+		
+		return bundle;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstance){
-		
-		return inflater.inflate(R.layout.add_new_exam, container, false);
+		View view = inflater.inflate(R.layout.add_new_exam, container, false);
+		return view;
 	}
 
 	@Override
@@ -43,6 +54,19 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 				newFragment.show(getFragmentManager(), "date_dialog");
 			}
 		});
+		
+
+		Bundle args = getArguments();
+		
+		if(args != null){
+			id = args.getLong(ID_KEY, -1);
+			((EditText) getView().findViewById(R.id.addExamName)).setText(args.getString(NAME_KEY));
+			GregorianCalendar cal = new GregorianCalendar();
+			cal.setTimeInMillis(args.getLong(DATE_KEY));
+			date.setText(DateFormat.format("dd/M/yyyy", cal.getTime()));
+			((EditText) getView().findViewById(R.id.addExamPages)).setText("" + args.getInt(PAGES_KEY));
+		}
+		
 		
 		getView().findViewById(R.id.buttonAddNewExam).setOnClickListener(this);
 	}
@@ -68,15 +92,18 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	
 	public interface OnConfirmListener{
 		public void onAdd(String name, Calendar date, int totalPages);
-		public void onEdit();
+		public void onEdit(long id, String name, Calendar date, int totalPages);
 	}
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		String name = ((EditText) getView().findViewById(R.id.addExamName)).getText().toString();
 		int totalPages = Integer.parseInt(((EditText) getView().findViewById(R.id.addExamPages)).getText().toString());
 		
-		listener.onAdd(name, cal, totalPages);
+		if(id == -1){
+			listener.onAdd(name, cal, totalPages);
+		}else{
+			listener.onEdit(id, name, cal, totalPages);
+		}
 	}
 }
