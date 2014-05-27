@@ -31,7 +31,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 			EDIT_FRAGMENT = 1,
 			PLANNING_FRAGMENT = 2;
 	
-	private ExamDataSource dataBase;
 	private ExamListFragment allListFragment, preparingListFragment, notPreparingListFragment;
 	private View contentFrame;
 	private long examEnhanced;
@@ -41,8 +40,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		dataBase = ((OnlyAWeekApplication) this.getApplicationContext()).getDataBase();
 	
 		contentFrame = findViewById(R.id.add_exam_content_frame);
 		
@@ -63,9 +60,9 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 				examEnhanced = savedInstanceState.getInt("exam", -1);
 			}
 		}else{
+			currentListContent = PREPARING_LIST;
 			currentRightContent = ADD_FRAGMENT;
 			examEnhanced = -1;
-			currentListContent = PREPARING_LIST;
 		}
 		
 		setListContent();
@@ -76,6 +73,10 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	public void onSaveInstanceState(Bundle saveInstanceState){
 		super.onSaveInstanceState(saveInstanceState);		
 		saveInstanceState.putInt("currentListContent", currentListContent);
+		if(contentFrame != null){
+			saveInstanceState.putInt("currentRightContent", currentRightContent);
+			saveInstanceState.putLong("exam", examEnhanced);
+		}
 	}
 	
 	@Override
@@ -157,7 +158,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		case PREPARING_LIST:
 			if(preparingListFragment == null){
 				preparingListFragment = new ExamListFragment();
-				QueryExam queryPreparExam = new QueryExam(dataBase);
+				QueryExam queryPreparExam = new QueryExam(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
 				queryPreparExam.setTypeQuery(QueryExam.EXAM_PREPARATION);
 				
 				preparingListFragment.setQuery(queryPreparExam);
@@ -169,7 +170,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		case NO_PREPARING_LIST:
 			if(notPreparingListFragment == null){
 				notPreparingListFragment = new ExamListFragment();
-				QueryExam queryNotPrepar = new QueryExam(dataBase);
+				QueryExam queryNotPrepar = new QueryExam(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
 				queryNotPrepar.setTypeQuery(QueryExam.EXAM_NOT_PREPARATION);
 				notPreparingListFragment.setQuery(queryNotPrepar);
 				
@@ -181,7 +182,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		case ALL_LIST:
 			if(allListFragment == null){
 				allListFragment = new ExamListFragment();
-				QueryExam queryAllExam = new QueryExam(dataBase);
+				QueryExam queryAllExam = new QueryExam(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
 				queryAllExam.setTypeQuery(QueryExam.ALL_EXAM);
 				allListFragment.setQuery(queryAllExam);
 				
@@ -245,7 +246,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 
 	@Override
 	public void onExamsDelete(long[] idList) {
-		dataBase.deleteExams(idList);
+		((OnlyAWeekApplication) getApplicationContext()).getDataBase().deleteExams(idList);
 	}
 
 	@Override

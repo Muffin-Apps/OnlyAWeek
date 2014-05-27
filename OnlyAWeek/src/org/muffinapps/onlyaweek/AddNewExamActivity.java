@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 public class AddNewExamActivity extends FragmentActivity implements OnConfirmListener{
-	private ExamDataSource dataBase;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +32,8 @@ public class AddNewExamActivity extends FragmentActivity implements OnConfirmLis
 	}
 
 	@Override
-	public void onAdd(String name, Calendar date, int totalPages) {
-		// TODO Auto-generated method stub
-		if(dataBase == null)
-			dataBase = ((OnlyAWeekApplication) getApplicationContext()).getDataBase();
-		
-		dataBase.insertNewExam(name, date, totalPages);
+	public void onAdd(String name, Calendar date, int totalPages) {		
+		((OnlyAWeekApplication) getApplicationContext()).getDataBase().insertNewExam(name, date, totalPages);
 		this.finish();
 	}
 
