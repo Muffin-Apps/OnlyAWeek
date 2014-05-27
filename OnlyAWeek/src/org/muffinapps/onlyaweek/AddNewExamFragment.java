@@ -24,11 +24,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnDateSetListener, OnClickListener, LoaderCallbacks<Cursor>{
-	private static final String ID_KEY = "id", NAME_KEY = "name", DATE_KEY = "date", PAGES_KEY = "pages";
+	private static final String ID_KEY = "id", NAME_KEY = "name", DATE_KEY = "dateText", PAGES_KEY = "pages";
 	private long id = -1;
-	private TextView date;
+	private TextView dateText;
 	private OnConfirmListener listener;
-	private Calendar cal;
+	private Calendar date;
 	
 	public static Bundle getArgsAsBundle(long id){
 		Bundle bundle = new Bundle();
@@ -48,9 +48,9 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	public void onActivityCreated(Bundle state){
 		super.onActivityCreated(state);
 		
-		date = (TextView) getView().findViewById(R.id.addExamDate);
+		dateText = (TextView) getView().findViewById(R.id.addExamDate);
 		
-		date.setOnClickListener(new View.OnClickListener() {
+		dateText.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -75,12 +75,12 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
-		if(cal == null)
-			cal = new GregorianCalendar(year, monthOfYear, dayOfMonth);
+		if(date == null)
+			date = new GregorianCalendar(year, monthOfYear, dayOfMonth);
 		else
-			cal.set(year, monthOfYear, dayOfMonth);
+			date.set(year, monthOfYear, dayOfMonth);
 		
-		date.setText(DateFormat.format("dd/M/yyyy", cal.getTime()));
+		dateText.setText(DateFormat.format("dd/M/yyyy", date.getTime()));
 	}
 	
 	public void setOnConfirmListener(OnConfirmListener l){
@@ -101,9 +101,9 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		
 		if(id == -1){
 			android.util.Log.d("ANEF", "onAdd");
-			listener.onAdd(name, cal, totalPages);
+			listener.onAdd(name, date, totalPages);
 		}else{
-			listener.onEdit(id, name, cal, totalPages);
+			listener.onEdit(id, name, date, totalPages);
 		}
 	}
 
@@ -124,9 +124,9 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
 		((EditText) getView().findViewById(R.id.addExamName)).setText(cursor.getString(cursor.getColumnIndex(ExamDataSource.NAME_COL[1])));
-		GregorianCalendar cal = new GregorianCalendar();
-		cal.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(ExamDataSource.NAME_COL[2])));
-		date.setText(DateFormat.format("dd/M/yyyy", cal.getTime()));
+		date = new GregorianCalendar();
+		date.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(ExamDataSource.NAME_COL[2])));
+		dateText.setText(DateFormat.format("dd/M/yyyy", date.getTime()));
 		((EditText) getView().findViewById(R.id.addExamPages)).setText("" + cursor.getInt(cursor.getColumnIndex(ExamDataSource.NAME_COL[4])));
 	}
 

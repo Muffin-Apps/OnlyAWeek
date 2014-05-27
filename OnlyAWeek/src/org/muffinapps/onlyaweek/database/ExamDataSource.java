@@ -105,6 +105,17 @@ public class ExamDataSource{
 		return c;
 	}
 	
+	public void editExam(long id, String name, Calendar date, int totalPag){
+		ContentValues content = new ContentValues();
+		content.put(ExamDataSource.NAME_COL[1], name);
+		content.put(ExamDataSource.NAME_COL[2], date.getTimeInMillis());
+		content.put(ExamDataSource.NAME_COL[3], totalPag);
+		
+		db.update(NAME_TABLE, content, NAME_COL[0] + " = " + id, null);
+		
+		notifyObservers();
+	}	
+	
 	public void deleteExam(long id){
 		deleteExams(new long[]{id});
 	}

@@ -1,8 +1,10 @@
 package org.muffinapps.onlyaweek;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.emud.content.Query;
+import org.muffinapps.onlyaweek.AddNewExamFragment.OnConfirmListener;
 import org.muffinapps.onlyaweek.ExamListFragment.ExamActionListener;
 import org.muffinapps.onlyaweek.database.CustomCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamCursorAdapter;
@@ -21,15 +23,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
-public class MainActivity extends FragmentActivity implements OnNavigationListener, ExamActionListener{
+public class MainActivity extends FragmentActivity implements OnNavigationListener, ExamActionListener, OnConfirmListener{
 	private static final int PREPARING_LIST = 0,
 			NO_PREPARING_LIST = 1,
 			ALL_LIST = 2;
+	private static final int ADD_FRAGMENT = 0,
+			EDIT_FRAGMENT = 1,
+			PLANNING_FRAGMENT = 2;
 	
 	private ExamDataSource dataBase;
 	private ExamListFragment allListFragment, preparingListFragment, notPreparingListFragment;
-	
-	private int currentListContent;
+	private View contentFrame;
+	private long examEnhanced;
+	private int currentListContent, currentRightContent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		
 		dataBase = ((OnlyAWeekApplication) this.getApplicationContext()).getDataBase();
 	
+		contentFrame = findViewById(R.id.add_exam_content_frame);
 		
 		String[] listnames = getResources().getStringArray(R.array.lists_titles);
 		ArrayAdapter<String> aAdpt = new ArrayAdapter<String>(this,
@@ -50,13 +57,19 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		actionBar.setListNavigationCallbacks(aAdpt, this);
 		
 		if(savedInstanceState != null){
-			currentListContent = savedInstanceState.getInt("currentListContent", PREPARING_LIST);	
+			currentListContent = savedInstanceState.getInt("currentListContent", PREPARING_LIST);
+			if(contentFrame != null){
+				currentRightContent = savedInstanceState.getInt("currentRightContent", ADD_FRAGMENT);
+				examEnhanced = savedInstanceState.getInt("exam", -1);
+			}
 		}else{
+			currentRightContent = ADD_FRAGMENT;
+			examEnhanced = -1;
 			currentListContent = PREPARING_LIST;
 		}
 		
 		setListContent();
-		
+		setRightContent();
 	}
 
 	@Override
@@ -72,18 +85,21 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	}
 	
 	@Override
+	public void onDestroy(){
+		((OnlyAWeekApplication) getApplicationContext()).closeDataBase();
+		super.onDestroy();
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	        case R.id.action_add:
-	        	View view = findViewById(R.id.add_exam_content_frame);
-	        	if(view == null){
+	        	if(contentFrame == null){
 	        		Intent intent = new Intent(this, AddNewExamActivity.class);
 		            startActivity(intent);
 	        	}else{
-	        		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-	        		AddNewExamFragment addFragment = new AddNewExamFragment();
-	        		fragmentTransaction.replace(R.id.add_exam_content_frame, addFragment);
-	        		fragmentTransaction.commit();
+	        		currentRightContent = ADD_FRAGMENT;
+	        		setRightContent();
 	        	}	            
 	            return true;
 	        case R.id.action_sort:
@@ -181,6 +197,31 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		fragmentTransaction.replace(R.id.main_content_frame, listFragment);
 		fragmentTransaction.commit();
 	}
+	
+	private void setRightContent(){
+		if(contentFrame == null)
+			return;
+		
+		Fragment fragment = null;
+		
+		switch(currentRightContent){
+		case ADD_FRAGMENT:
+    		fragment = new AddNewExamFragment();
+    		((AddNewExamFragment) fragment).setOnConfirmListener(this);
+			break;
+		case EDIT_FRAGMENT:
+			fragment = new AddNewExamFragment();
+			((AddNewExamFragment) fragment).setArguments(AddNewExamFragment.getArgsAsBundle(examEnhanced));
+			((AddNewExamFragment) fragment).setOnConfirmListener(this);
+			break;
+		default:
+			return;
+		}
+		
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		fragmentTransaction.replace(R.id.add_exam_content_frame, fragment);
+		fragmentTransaction.commit();
+	}
 
 	@Override
 	public void onExamClick(long id) {
@@ -190,10 +231,16 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 
 	@Override
 	public void onExamEdit(long id) {
-		Intent intent = new Intent(this, AddNewExamActivity.class);
-		intent.setAction(Intent.ACTION_EDIT);
-		intent.putExtras(AddNewExamFragment.getArgsAsBundle(id));
-        startActivity(intent);
+		if(contentFrame == null){
+			Intent intent = new Intent(this, AddNewExamActivity.class);
+			intent.setAction(Intent.ACTION_EDIT);
+			intent.putExtras(AddNewExamFragment.getArgsAsBundle(id));
+			startActivity(intent);
+		}else{
+			currentRightContent = EDIT_FRAGMENT;
+			examEnhanced = id;
+			setRightContent();
+		}
 	}
 
 	@Override
@@ -201,4 +248,18 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		dataBase.deleteExams(idList);
 	}
 
+	@Override
+	public void onAdd(String name, Calendar date, int totalPages) {
+		ExamDataSource dataSource = ((OnlyAWeekApplication) getApplicationContext()).getDataBase();
+		
+		dataSource.insertNewExam(name, date, totalPages);
+	}
+
+	@Override
+	public void onEdit(long id, String name, Calendar date, int totalPages) {
+		android.util.Log.d("Act", "onEdit");
+		ExamDataSource dataSource = ((OnlyAWeekApplication) getApplicationContext()).getDataBase();
+		
+		dataSource.editExam(id, name, date, totalPages);
+	}
 }

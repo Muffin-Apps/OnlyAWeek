@@ -12,4 +12,9 @@ public class OnlyAWeekApplication extends Application{
 		
 		return dataBase;
 	}
+	
+	public void closeDataBase(){
+		if(dataBase != null)
+			dataBase.closeDB();
+	}
 }

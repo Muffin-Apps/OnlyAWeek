@@ -44,7 +44,10 @@ public class AddNewExamActivity extends FragmentActivity implements OnConfirmLis
 
 	@Override
 	public void onEdit(long id, String name, Calendar date, int totalPages) {
-		// TODO Auto-generated method stub
 		android.util.Log.d("Act", "onEdit");
+		ExamDataSource dataSource = ((OnlyAWeekApplication) getApplicationContext()).getDataBase();
+		
+		dataSource.editExam(id, name, date, totalPages);
+		this.finish();
 	}
 }
