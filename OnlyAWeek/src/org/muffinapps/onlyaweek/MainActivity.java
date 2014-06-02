@@ -1,9 +1,6 @@
 package org.muffinapps.onlyaweek;
 
 import java.util.Calendar;
-import java.util.List;
-
-import org.emud.content.Query;
 import org.muffinapps.onlyaweek.AddNewExamFragment.OnConfirmListener;
 import org.muffinapps.onlyaweek.ExamListFragment.ExamActionListener;
 import org.muffinapps.onlyaweek.database.CustomCursorAdapter;
@@ -110,23 +107,12 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	        	//TODO
 	            return true;
 	        case R.id.action_exit:
-	        	//TODO
+	        	this.finish();
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
-	}
-
-		
-
-	// Esta clase esta simplemente para poder probarlo
-	public static class DummyFragment extends Fragment{		
-		@Override
-		public android.view.View onCreateView(android.view.LayoutInflater inflater, android.view.ViewGroup container, Bundle savedInstanceState){
-			return inflater.inflate(android.R.layout.simple_list_item_1, container, false);
-		}
-	}
-	
+	}	
 		
 	@Override
 	public boolean onNavigationItemSelected(int position, long id) {
@@ -214,6 +200,9 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 			fragment = new AddNewExamFragment();
 			((AddNewExamFragment) fragment).setArguments(AddNewExamFragment.getArgsAsBundle(examEnhanced));
 			((AddNewExamFragment) fragment).setOnConfirmListener(this);
+			break;
+		case PLANNING_FRAGMENT:
+			//instanciar el fragment
 			break;
 		default:
 			return;
