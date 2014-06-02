@@ -5,6 +5,8 @@ import java.util.GregorianCalendar;
 
 import org.muffinapps.onlyaweek.R;
 
+import com.fortysevendeg.swipelistview.SwipeListView;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
@@ -25,13 +27,22 @@ public class CustomCursorAdapter extends CursorAdapter{
 	public View newView(Context context, Cursor cursor, ViewGroup view) {
 		LayoutInflater inflater = LayoutInflater.from(view.getContext());
        // View retView = inflater.inflate(R.layout.subject, view, false);
-		View retView = inflater.inflate(R.layout.list_exam_item, view, false);
+		View retView = inflater.inflate(R.layout.subject, view, false);
         return retView;
 	}
-
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup viewGroup){
+		View view = super.getView(position, convertView, viewGroup);
+		
+		if(viewGroup instanceof SwipeListView)
+			((SwipeListView) viewGroup).recycle(view, position);
+		
+		return view;
+	}
+	
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-	/*
 		TextView name = (TextView) view.findViewById(R.id.nameSubject);
 		name.setText(cursor.getString(1));
 		
@@ -47,7 +58,7 @@ public class CustomCursorAdapter extends CursorAdapter{
 		assignedPag.setText(cursor.getString(4));
 		
 		TextView totalPag = (TextView) view.findViewById(R.id.totalPag);
-		totalPag.setText(cursor.getString(5));*/
+		totalPag.setText(cursor.getString(5));
 	}
 
 }

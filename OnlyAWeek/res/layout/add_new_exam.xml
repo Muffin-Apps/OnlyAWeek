@@ -19,7 +19,7 @@
     </EditText>
 
     <TextView
-        style="@android:style/Widget.Holo.Light.Spinner"
+        style="@android:style/Widget.Holo.Spinner"
         android:id="@+id/addExamDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

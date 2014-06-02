@@ -24,7 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnDateSetListener, OnClickListener, LoaderCallbacks<Cursor>{
-	private static final String ID_KEY = "id", NAME_KEY = "name", DATE_KEY = "dateText", PAGES_KEY = "pages";
+	private static final String ID_KEY = "id";
 	private long id = -1;
 	private TextView dateText;
 	private OnConfirmListener listener;

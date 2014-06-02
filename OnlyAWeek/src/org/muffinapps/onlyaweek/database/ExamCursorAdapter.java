@@ -5,6 +5,8 @@ import java.util.GregorianCalendar;
 
 import org.muffinapps.onlyaweek.R;
 
+import com.fortysevendeg.swipelistview.SwipeListView;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
@@ -29,7 +31,18 @@ public class ExamCursorAdapter extends CursorAdapter{
 	}
 
 	@Override
+	public View getView(int position, View convertView, ViewGroup viewGroup){
+		View view = super.getView(position, convertView, viewGroup);
+		
+		if(viewGroup instanceof SwipeListView)
+			((SwipeListView) viewGroup).recycle(view, position);
+		
+		return view;
+	}
+	
+	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
+		view.setBackgroundResource(R.drawable.choice_unselected);
 		TextView name = (TextView) view.findViewById(R.id.nameExam);
 		name.setText(cursor.getString(1));
 		
