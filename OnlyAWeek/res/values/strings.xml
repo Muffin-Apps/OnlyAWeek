@@ -22,4 +22,6 @@
 
     <string name="title_activity_add_new_exam">AddNewExamActivity</string>
 
+    <string name="date_title">FECHA DEL EXAMEN</string>
+
 </resources>

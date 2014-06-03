@@ -4,32 +4,48 @@
     android:layout_height="match_parent"
     >
     
-	<LinearLayout 
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="@dimen/outter_padding"
+	    android:orientation="vertical" >
 
     <EditText
         android:id="@+id/addExamName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/exam_name" >
+        android:layout_marginBottom="@dimen/outter_padding"
+        android:layout_marginLeft="@dimen/inner_padding"
+        android:hint="@string/exam_name"
+        android:padding="@dimen/inner_padding" >
 
         <requestFocus />
     </EditText>
 
     <TextView
-        style="@android:style/Widget.Holo.Spinner"
+        android:id="@+id/textView1"
+        style="@style/ValueHeaderText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/date_title"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
         android:id="@+id/addExamDate"
+        style="@android:style/Widget.Holo.Spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/outter_padding"
+        android:layout_marginLeft="@dimen/outter_padding"
         android:ems="10"
-        android:hint="@string/exam_date"/>
+        android:hint="@string/exam_date"
+        android:padding="@dimen/inner_padding" />
 
     <EditText
         android:id="@+id/addExamPages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/inner_padding"
         android:ems="10"
         android:hint="@string/exam_pages"
         android:inputType="number" />
