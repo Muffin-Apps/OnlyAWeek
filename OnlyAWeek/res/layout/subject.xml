@@ -37,43 +37,43 @@
         android:orientation="vertical" >
 
         <TextView
+            style="@style/ValueHeaderText"
             android:id="@+id/nameSubject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dispositivos Moviles"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:text="Dispositivos Moviles" />
 
         <TextView
+            style="@style/ValueText"
             android:id="@+id/dateSubject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10/10/2010"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="10/10/2010" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
             <TextView
+            	style="@style/ValueText"
                 android:id="@+id/remainingPag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="40"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="40" />
 
             <TextView
+            	style="@style/ValueText"
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" / "
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:text=" / " />
 
             <TextView
+            	style="@style/ValueText"
                 android:id="@+id/totalPag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="9999"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="9999" />
 
         </LinearLayout>
 
@@ -85,12 +85,12 @@
         android:layout_weight="0.70" >
 
         <TextView
+            style="@style/ValueHeaderText"
             android:id="@+id/assignedPag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="20"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:text="20" />
 
     </LinearLayout>
 

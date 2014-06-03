@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     >
         <LinearLayout
-        android:id = "@+id/back"
+        android:id="@+id/back"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E3E3E3"
+        android:background="#131313"
         android:tag="back" >
 
         <TextView
@@ -31,18 +31,18 @@
     android:tag="front">
 
     <TextView
+        style="@style/ValueHeaderText"
         android:id="@+id/nameExam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nombre Examen"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="Nombre Examen" />
 
     <TextView
+        style="@style/ValueText"
         android:id="@+id/dateExam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="26/10/2011"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:text="26/10/2011" />
 
 </LinearLayout>
 </FrameLayout>
