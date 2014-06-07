@@ -141,10 +141,21 @@ public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cu
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 			return false;
 		}
+		
+		@Override
+		public void onClickFrontView(int position){
+			CursorAdapter adapter = (CursorAdapter) examListFragment.getListAdapter();
+			long examId = adapter.getItemId(position);
+			
+			examActionListener.onExamClick(examId);			
+		}
 
 		@Override
 		public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-			// TODO Lamar al actionListener.onExamClick()
+			CursorAdapter adapter = (CursorAdapter) examListFragment.getListAdapter();
+			long examId = adapter.getItemId(position);
+			
+			examActionListener.onExamClick(examId);
 		}
 	}
 	

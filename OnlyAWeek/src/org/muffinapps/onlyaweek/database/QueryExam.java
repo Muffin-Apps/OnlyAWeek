@@ -5,34 +5,21 @@ import org.emud.content.Query;
 import android.database.Cursor;
 
 public class QueryExam implements Query<Cursor> {
-	public static final int ALL_EXAM = 0,
-							EXAM_PREPARATION = 1,
-							EXAM_NOT_PREPARATION =2;
+	private ExamDataSource dataSource;
+	private long examId;
 	
-	private ExamDataSource db;
-	private int typeQuery;
-	
-	public QueryExam(ExamDataSource db){
-		this.db = db;
+	public QueryExam(ExamDataSource ds, long id){
+		dataSource = ds;
+		examId = id;
 	}
 	
-	public void setTypeQuery(int newType){
-		typeQuery = newType;
+	public void setExamId(long id){
+		examId = id;
 	}
-	
+
 	@Override
 	public Cursor execute() {
-		switch(typeQuery){
-		case ALL_EXAM:
-			return db.getAllExam();
-		case EXAM_PREPARATION:
-			return db.getExamPreparation();
-		case EXAM_NOT_PREPARATION:
-			return db.getExamNotPreparation();
-		default:
-			break;
-		}
-		return null;
+		return dataSource.getExam(examId);
 	}
 
 }

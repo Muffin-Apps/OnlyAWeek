@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">OnlyAWeek</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="app_name">Only A Week</string>
+    <string name="title_activity_main">Only A Week</string>
     <string name="action_add">Añadir</string>
     <string name="action_edit">Editar</string>
     <string name="action_delete">Borrar</string>
@@ -13,6 +13,10 @@
     <string name="exam_name">Nombre</string>
     <string name="exam_date">dd/mm/aaaa</string>
     <string name="exam_pages">Total de páginas</string>
+    <string name="accept_label">Aceptar</string>
+    <string name="cancel_label">Cancelar</string>
+    <string name="planningupdate_title">Actualización</string>
+    <string name="planningupdate_text">¿Cuántas páginas has estudiado desde la última actualización?</string>
 
     <string-array name="lists_titles">
         <item>Preparando</item>
@@ -21,6 +25,7 @@
     </string-array>
 
     <string name="title_activity_add_new_exam">AddNewExamActivity</string>
+    <string name="title_activity_planning">Planificacion</string>
 
     <string name="date_title">FECHA DEL EXAMEN</string>
 

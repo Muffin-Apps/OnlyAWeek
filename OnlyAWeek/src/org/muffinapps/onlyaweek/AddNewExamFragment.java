@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import org.emud.content.Query;
 import org.emud.support.v4.content.ObserverCursorLoader;
 import org.muffinapps.onlyaweek.database.ExamDataSource;
+import org.muffinapps.onlyaweek.database.QueryExam;
 
 import android.app.DatePickerDialog;
 import android.database.Cursor;
@@ -29,6 +30,7 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	private TextView dateText;
 	private OnConfirmListener listener;
 	private Calendar date;
+	private QueryExam query;
 	
 	public static Bundle getArgsAsBundle(long id){
 		Bundle bundle = new Bundle();
@@ -63,8 +65,9 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		Bundle args = getArguments();
 		
 		if(args != null){
-			android.util.Log.d("ANEF", "agrs != null");
 			id = args.getLong(ID_KEY, -1);
+			ExamDataSource ds = ((OnlyAWeekApplication) getActivity().getApplicationContext()).getDataBase();
+			query = new QueryExam(ds, id);
 			getLoaderManager().initLoader(0, null, this);
 		}
 		
@@ -83,13 +86,19 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		dateText.setText(DateFormat.format("dd/M/yyyy", date.getTime()));
 	}
 	
-	public void setOnConfirmListener(OnConfirmListener l){
-		listener = l;
+	public void setExamId(long newId){
+		id = newId;
+
+		if(query == null){
+			ExamDataSource ds = ((OnlyAWeekApplication) getActivity().getApplicationContext()).getDataBase();
+			query = new QueryExam(ds, id);
+		}
+		
+		getLoaderManager().restartLoader(0, null, this);
 	}
 	
-	public interface OnConfirmListener{
-		public void onAdd(String name, Calendar date, int totalPages);
-		public void onEdit(long id, String name, Calendar date, int totalPages);
+	public void setOnConfirmListener(OnConfirmListener l){
+		listener = l;
 	}
 
 	@Override
@@ -109,15 +118,6 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-		final ExamDataSource ds = ((OnlyAWeekApplication) getActivity().getApplicationContext()).getDataBase();
-		
-		Query<Cursor> query = new Query<Cursor>(){
-			@Override
-			public Cursor execute() {
-				return ds.getExam(id);
-			}
-		};
-		
 		return new ObserverCursorLoader(getActivity(), query);
 	}
 
@@ -133,5 +133,10 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
 		
+	}
+	
+	public interface OnConfirmListener{
+		public void onAdd(String name, Calendar date, int totalPages);
+		public void onEdit(long id, String name, Calendar date, int totalPages);
 	}
 }

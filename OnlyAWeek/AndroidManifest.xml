@@ -27,6 +27,10 @@
             android:name="org.muffinapps.onlyaweek.AddNewExamActivity"
             android:label="@string/title_activity_add_new_exam" >
         </activity>
+        <activity
+            android:name="org.muffinapps.onlyaweek.PlanningActivity"
+            android:label="@string/title_activity_planning" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,7 +1,6 @@
 package org.muffinapps.onlyaweek.database;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import org.emud.content.DataSubject;
 import org.emud.content.observer.Observer;
@@ -16,8 +15,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ExamDataSource{
 	private static final String NAME_DB = "exams_db";
 	public static final String NAME_TABLE = "exams";
-	private static final int VERSION = 3;
-	public static final String [] NAME_COL = {"_id", "name", "date", "remainingPag", "totalPag", "preparing"};
+	private static final int VERSION = 4;
+	public static final String [] NAME_COL = {"_id", "name", "date", "totalPag", "remainingPag", "preparing", "revisionDays"};
 	
 	private SQLiteDatabase db;
     private ExamSQLiteHelper dbExamSqliteHelper;
@@ -37,12 +36,6 @@ public class ExamDataSource{
 		}
 	}
 	
-	private void openDBModeReader(){
-		if(db == null){
-			db = dbExamSqliteHelper.getReadableDatabase();
-		}
-	}
-	
 	public void closeDB(){
         if(db != null){
             db.close();
@@ -57,6 +50,7 @@ public class ExamDataSource{
 		content.put(ExamDataSource.NAME_COL[3], totalPag);
 		content.put(ExamDataSource.NAME_COL[4], totalPag);
 		content.put(ExamDataSource.NAME_COL[5], 0);
+		content.put(ExamDataSource.NAME_COL[6], 0);
 		
 		db.insert(NAME_TABLE, null, content);
 		
@@ -114,7 +108,32 @@ public class ExamDataSource{
 		db.update(NAME_TABLE, content, NAME_COL[0] + " = " + id, null);
 		
 		notifyObservers();
-	}	
+	}
+	
+	public void updatePlanning(long id, int pages){
+		String sqlQuery = "UPDATE " + NAME_TABLE + " SET " + NAME_COL[4] + " = " + NAME_COL[4] + " - " + pages + " WHERE " + NAME_COL[0] + " = " + id;  
+		db.execSQL(sqlQuery);
+
+		notifyObservers();
+	}
+	
+	public void editPlanning(long id, boolean planning){
+		ContentValues content = new ContentValues();
+		content.put(ExamDataSource.NAME_COL[5], planning ? 1 : 0); 
+		
+		db.update(NAME_TABLE, content, NAME_COL[0] + " = " + id, null);
+		
+		notifyObservers();
+	}
+	
+	public void editRevisionDays(long id, int days){
+		ContentValues content = new ContentValues();
+		content.put(ExamDataSource.NAME_COL[6], days); 
+		
+		db.update(NAME_TABLE, content, NAME_COL[0] + " = " + id, null);
+		
+		notifyObservers();
+	}
 	
 	public void deleteExam(long id){
 		deleteExams(new long[]{id});
@@ -150,7 +169,8 @@ public class ExamDataSource{
                 NAME_COL[2] + " LONG NOT NULL, " +
                 NAME_COL[3] + " INTEGER NOT NULL, " +
                 NAME_COL[4] + " INTEGER NOT NULL, " +
-                NAME_COL[5] + " INTEGER NOT NULL);";
+                NAME_COL[5] + " INTEGER NOT NULL, " +
+                NAME_COL[6] + " INTEGER NOT NULL);";
 
 		public ExamSQLiteHelper(Context context, String name,
 				CursorFactory factory, int version) {
