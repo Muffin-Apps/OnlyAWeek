@@ -5,18 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="#4188D2"
     >
 
     <LinearLayout
         android:id = "@+id/back"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E3E3E3" >
+        android:background="@drawable/background_gradient" >
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="Editar"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 

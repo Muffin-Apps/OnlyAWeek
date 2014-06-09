@@ -4,13 +4,13 @@
     style="@style/ListItem"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#4188D2"
     >
-        <LinearLayout
-        android:id="@+id/back"
+    <LinearLayout
+        android:id = "@+id/back"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#131313"
-        android:tag="back" >
+        android:background="@drawable/background_gradient" >
 
         <TextView
             android:id="@+id/textView1"
