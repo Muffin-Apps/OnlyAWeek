@@ -3,7 +3,6 @@ package org.muffinapps.onlyaweek;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import org.emud.content.Query;
 import org.emud.support.v4.content.ObserverCursorLoader;
 import org.muffinapps.onlyaweek.database.ExamDataSource;
 import org.muffinapps.onlyaweek.database.QueryExam;
@@ -127,7 +126,7 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		date = new GregorianCalendar();
 		date.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(ExamDataSource.NAME_COL[2])));
 		dateText.setText(DateFormat.format("dd/M/yyyy", date.getTime()));
-		((EditText) getView().findViewById(R.id.addExamPages)).setText("" + cursor.getInt(cursor.getColumnIndex(ExamDataSource.NAME_COL[4])));
+		((EditText) getView().findViewById(R.id.addExamPages)).setText("" + cursor.getInt(cursor.getColumnIndex(ExamDataSource.NAME_COL[3])));
 	}
 
 	@Override
