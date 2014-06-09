@@ -33,7 +33,7 @@ import android.widget.TextView;
 public class PlanningFragment extends Fragment implements OnClickListener, LoaderCallbacks<Cursor>, OnCheckedChangeListener, PlanningUpdateDialogFragment.OnConfirmListener{
 	private static final String ID_KEY = "id";
 	
-	private long id;
+	private long id = -1;
 	private PlanningListener listener;
 	private QueryExam query;
 	private Checkable planningCheckable;
@@ -53,6 +53,11 @@ public class PlanningFragment extends Fragment implements OnClickListener, Loade
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		examDate = new GregorianCalendar();
+		
+		if(savedInstanceState != null){
+			id = savedInstanceState.getLong(ID_KEY);
+			android.util.Log.d("PLF", "onCreate id:" + id);
+		}
 	}
 	
 	@Override
@@ -134,12 +139,21 @@ public class PlanningFragment extends Fragment implements OnClickListener, Loade
 
 		Bundle args = getArguments();
 		
-		if(args != null){
+		if(args != null)
 			id = args.getLong(ID_KEY, -1);
+		
+		if(id != -1){
 			ExamDataSource ds = ((OnlyAWeekApplication) getActivity().getApplicationContext()).getDataBase();
 			query = new QueryExam(ds, id);
-			getLoaderManager().initLoader(0, null, this);
+			getLoaderManager().restartLoader(0, null, this);			
 		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState){
+		super.onSaveInstanceState(savedInstanceState);
+		
+		savedInstanceState.putLong(ID_KEY, id);
 	}
 
 	@Override
@@ -243,7 +257,11 @@ public class PlanningFragment extends Fragment implements OnClickListener, Loade
 
 	@Override
 	public void planningUpdateConfirmed(int pages) {
+		if(pages > remainingPages)
+			pages = remainingPages;
+		
 		remainingPages -= pages;
+		
 		if(listener!=null)
 			listener.onPlanningUpdated(id, pages);
 		
