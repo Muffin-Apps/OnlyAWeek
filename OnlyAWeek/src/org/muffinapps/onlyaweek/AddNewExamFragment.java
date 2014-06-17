@@ -105,24 +105,12 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	@Override
 	public void onClick(View v) {
 		String name = ((EditText) getView().findViewById(R.id.addExamName)).getText().toString();
-		int totalPages = -1;
-		
-		totalPages =  Integer.parseInt(((EditText) getView().findViewById(R.id.addExamPages)).getText().toString());
-		
-		System.out.println("Nombre:"+name);
-		System.out.println("Paginas:"+totalPages);
-		System.out.println("Date:"+date==null);
+		String totalPagesString = ((EditText) getView().findViewById(R.id.addExamPages)).getText().toString();
+		int totalPages;
 		
 		android.util.Log.d("ANEF", "onClick");
 		
-		if(name!=null && totalPages!=-1 && date!=null ){
-			if(id == -1){
-				android.util.Log.d("ANEF", "onAdd");
-				listener.onAdd(name, date, totalPages);
-			}else{
-				listener.onEdit(id, name, date, totalPages);
-			}
-		}else{
+		if(name.equals("") || totalPagesString.equals("") || date==null ){
 			new AlertDialog.Builder(getActivity())
 		    .setTitle("Campos vacíos")
 		    .setMessage("Debes rellenar todos los campos para poder confirmar")
@@ -132,6 +120,14 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 		        }
 		     })
 		     .show();
+		}else{
+			totalPages =  Integer.parseInt(totalPagesString);
+			if(id == -1){
+				android.util.Log.d("ANEF", "onAdd");
+				listener.onAdd(name, date, totalPages);
+			}else{
+				listener.onEdit(id, name, date, totalPages);
+			}
 		}
 		
 	}
