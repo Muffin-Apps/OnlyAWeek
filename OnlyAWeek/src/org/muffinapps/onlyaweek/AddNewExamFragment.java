@@ -7,7 +7,9 @@ import org.emud.support.v4.content.ObserverCursorLoader;
 import org.muffinapps.onlyaweek.database.ExamDataSource;
 import org.muffinapps.onlyaweek.database.QueryExam;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -103,16 +105,35 @@ public class AddNewExamFragment extends Fragment implements DatePickerDialog.OnD
 	@Override
 	public void onClick(View v) {
 		String name = ((EditText) getView().findViewById(R.id.addExamName)).getText().toString();
-		int totalPages = Integer.parseInt(((EditText) getView().findViewById(R.id.addExamPages)).getText().toString());
+		int totalPages = -1;
+		
+		totalPages =  Integer.parseInt(((EditText) getView().findViewById(R.id.addExamPages)).getText().toString());
+		
+		System.out.println("Nombre:"+name);
+		System.out.println("Paginas:"+totalPages);
+		System.out.println("Date:"+date==null);
 		
 		android.util.Log.d("ANEF", "onClick");
 		
-		if(id == -1){
-			android.util.Log.d("ANEF", "onAdd");
-			listener.onAdd(name, date, totalPages);
+		if(name!=null && totalPages!=-1 && date!=null ){
+			if(id == -1){
+				android.util.Log.d("ANEF", "onAdd");
+				listener.onAdd(name, date, totalPages);
+			}else{
+				listener.onEdit(id, name, date, totalPages);
+			}
 		}else{
-			listener.onEdit(id, name, date, totalPages);
+			new AlertDialog.Builder(getActivity())
+		    .setTitle("Campos vacíos")
+		    .setMessage("Debes rellenar todos los campos para poder confirmar")
+		    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            // Confirm
+		        }
+		     })
+		     .show();
 		}
+		
 	}
 
 	@Override

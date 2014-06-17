@@ -198,8 +198,8 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		
 		switch(newContent){
 		case ADD_FRAGMENT:
-    		fragment = new AddNewExamFragment();
-    		((AddNewExamFragment) fragment).setOnConfirmListener(this);
+			currentRightFragment = new AddNewExamFragment();
+    		((AddNewExamFragment) currentRightFragment).setOnConfirmListener(this);
 			break;
 		case EDIT_FRAGMENT:
 			if(newContent != currentRightContent){
@@ -229,7 +229,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		examEnhanced = examId;
 		
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-		fragmentTransaction.replace(R.id.add_exam_content_frame, fragment);
+		fragmentTransaction.replace(R.id.add_exam_content_frame, currentRightFragment);
 		fragmentTransaction.commit();
 	}
 
