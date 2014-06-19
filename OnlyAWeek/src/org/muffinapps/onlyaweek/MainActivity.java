@@ -34,6 +34,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 			PLANNING_FRAGMENT = 2;
 	
 	private ExamListFragment allListFragment, preparingListFragment, notPreparingListFragment;
+	private ExamListFragment listFragment;
 	private View contentFrame;
 	private long examEnhanced;
 	private int currentListContent, currentRightContent;
@@ -144,7 +145,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	}
 
 	private void setListContent() {
-		ExamListFragment listFragment = null;
 		switch(currentListContent){
 		case PREPARING_LIST:
 			if(preparingListFragment == null){
@@ -231,6 +231,20 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		fragmentTransaction.replace(R.id.add_exam_content_frame, currentRightFragment);
 		fragmentTransaction.commit();
+	}
+	
+	@Override
+	public void onExamsLoaded(){
+		if(contentFrame != null){
+			long id = listFragment.getExamId(0);
+			if(id != -1){
+				if(currentRightContent != PLANNING_FRAGMENT)
+					setRightContent(PLANNING_FRAGMENT, id);
+			}else{
+				//en lugar de esto el fragment ese nuevo
+				setRightContent(ADD_FRAGMENT, 0);
+			}
+		}
 	}
 
 	@Override

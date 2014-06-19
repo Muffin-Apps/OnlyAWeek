@@ -74,11 +74,22 @@ public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cu
 	}
 	
 	public static interface ExamActionListener{
-		 public void onExamClick(long id);
-		  
-		 public void onExamEdit(long id);
-		 
-		 public void onExamsDelete(long[] id);
+		public void onExamsLoaded();
+		
+		public void onExamClick(long id);
+
+		public void onExamEdit(long id);
+
+		public void onExamsDelete(long[] id);
+	}
+	
+	public long getExamId(int position){
+		CursorAdapter adapter = (CursorAdapter) getListAdapter();
+		
+		if(adapter == null)
+			return -1;
+		
+		return adapter.getItemId(position);
 	}
 	
 	public static class ExamListListener extends BaseSwipeListViewListener implements AbsListView.MultiChoiceModeListener, OnItemClickListener{
@@ -169,6 +180,9 @@ public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cu
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
 		
 		((CursorAdapter) getListAdapter()).swapCursor(arg1);
+		
+		if(actionListener != null)
+			actionListener.onExamsLoaded();
 	}
 
 	@Override
