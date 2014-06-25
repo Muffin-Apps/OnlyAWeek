@@ -3,7 +3,7 @@ package org.muffinapps.onlyaweek.database;
 import java.util.GregorianCalendar;
 
 import org.muffinapps.onlyaweek.R;
-import org.muffinapps.onlyaweek.StudyingRatioUtils;
+import org.muffinapps.onlyaweek.StudyingRatio;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
 
@@ -56,8 +56,8 @@ public class ExamAdapter extends CursorAdapter{
 		
 		if(preparing){
 			int remainingPages = cursor.getInt(4), revisionDays = cursor.getInt(6);
-			float ratio = StudyingRatioUtils.calculateRatio(remainingPages, examDate, revisionDays);
-			int colorResource = StudyingRatioUtils.getRatioColorResource(ratio, remainingPages);
+			StudyingRatio ratio = new StudyingRatio(remainingPages, examDate, revisionDays);
+			int colorResource = ratio.getRatioColorResource();
 			
 			colorLayout.setBackgroundResource(colorResource);
 		}else{

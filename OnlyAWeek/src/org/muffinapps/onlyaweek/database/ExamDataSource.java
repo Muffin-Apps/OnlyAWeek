@@ -69,7 +69,6 @@ public class ExamDataSource{
 	
 	public Cursor getAllExam(String order){
 		Cursor c = null;
-		String [] col = {NAME_COL[0], NAME_COL[1], NAME_COL[2]};
 		
 		c = db.query(NAME_TABLE, NAME_COL, null, null, null, null, order);
 		
@@ -100,10 +99,21 @@ public class ExamDataSource{
 	}
 	
 	public void editExam(long id, String name, Calendar date, int totalPag){
+		Cursor c = null;
+		
+		c = db.query(NAME_TABLE, new String[]{NAME_COL[0], NAME_COL[3]}, NAME_COL[0] + " = ?", new String[]{String.valueOf(id)}, null, null, null, "1");
+		
+		c.moveToFirst();
+		
 		ContentValues content = new ContentValues();
 		content.put(ExamDataSource.NAME_COL[1], name);
 		content.put(ExamDataSource.NAME_COL[2], date.getTimeInMillis());
-		content.put(ExamDataSource.NAME_COL[3], totalPag);
+		if(totalPag != c.getLong(c.getColumnIndex(NAME_COL[3]))){
+			content.put(ExamDataSource.NAME_COL[3], totalPag);
+			content.put(ExamDataSource.NAME_COL[4], totalPag);
+		}
+		
+		c.close();
 		
 		db.update(NAME_TABLE, content, NAME_COL[0] + " = " + id, null);
 		

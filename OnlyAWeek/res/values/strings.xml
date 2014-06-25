@@ -3,6 +3,9 @@
 
     <string name="app_name">Only A Week</string>
     <string name="title_activity_main">Only A Week</string>
+    <string name="title_activity_add">Nuevo examen</string>
+    <string name="title_activity_edit">Editar</string>
+    <string name="title_activity_planning">Planificación</string>
     <string name="action_add">Añadir</string>
     <string name="action_edit">Editar</string>
     <string name="action_delete">Borrar</string>
@@ -23,9 +26,6 @@
         <item>Nombre A-Z</item>
         <item>Preparando</item>
     </string-array>
-
-    <string name="title_activity_add_new_exam">AddNewExamActivity</string>
-    <string name="title_activity_planning">Planificacion</string>
 
     <string name="date_title">FECHA DEL EXAMEN</string>
 

@@ -24,11 +24,11 @@ public class QueryExamList implements Query<Cursor> {
 	public Cursor execute() {
 		switch(typeQuery){
 		case ORDER_DATE:
-			return db.getAllExam(db.NAME_COL[2]);
+			return db.getAllExam(ExamDataSource.NAME_COL[2]);
 		case ORDER_NAME:
-			return db.getAllExam(db.NAME_COL[1]);
+			return db.getAllExam(ExamDataSource.NAME_COL[1]);
 		case ORDER_PREPARING:
-			return db.getAllExam(db.NAME_COL[5]);
+			return db.getAllExam(ExamDataSource.NAME_COL[5] + " DESC");
 		default:
 			break;
 		}

@@ -22,7 +22,10 @@ public class AddNewExamActivity extends FragmentActivity implements OnConfirmLis
 		String action = intent.getAction(); 
 		
 		if(action != null && action.equals(Intent.ACTION_EDIT)){
+			setTitle(R.string.title_activity_edit);
 			addFragment.setArguments(intent.getExtras());
+		}else{
+			setTitle(R.string.title_activity_add);
 		}
 		
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

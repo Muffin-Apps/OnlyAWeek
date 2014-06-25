@@ -226,14 +226,14 @@ public class PlanningFragment extends Fragment implements OnClickListener, Loade
 	}
 
 	private void updateRatioDisplay(){
-		float ratio;
+		StudyingRatio ratio;
 		View view = getView();		
 		
-		ratio = StudyingRatioUtils.calculateRatio(remainingPages, examDate, revisionDays);
+		ratio = new StudyingRatio(remainingPages, examDate, revisionDays);
 
 		((TextView) view.findViewById(R.id.planning_remaining)).setText(""+remainingPages);
-		((TextView) view.findViewById(R.id.planning_ratio)).setText(StudyingRatioUtils.getRatioString(ratio));
-		((TextView) view.findViewById(R.id.planning_comment)).setText(StudyingRatioUtils.getRatioComment(ratio, remainingPages));
+		((TextView) view.findViewById(R.id.planning_ratio)).setText(ratio.getRatioString());
+		((TextView) view.findViewById(R.id.planning_comment)).setText(ratio.getRatioComment());
 	}
 	
 	private void setDataLayoutEnabled(ViewGroup viewGroup, boolean enabled){

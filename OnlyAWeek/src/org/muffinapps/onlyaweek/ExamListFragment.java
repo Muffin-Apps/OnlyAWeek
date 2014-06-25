@@ -1,15 +1,9 @@
 package org.muffinapps.onlyaweek;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.emud.content.Query;
 import org.emud.support.v4.content.ObserverCursorLoader;
-import org.muffinapps.onlyaweek.database.ExamDataSource;
 import org.muffinapps.onlyaweek.database.QueryExamList;
-
-import com.fortysevendeg.swipelistview.SwipeListView;
-import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
 
 import android.database.Cursor;
 import android.os.Build;
@@ -29,6 +23,9 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
+import com.fortysevendeg.swipelistview.SwipeListView;
 
 public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cursor>{
 	private ExamActionListener actionListener;

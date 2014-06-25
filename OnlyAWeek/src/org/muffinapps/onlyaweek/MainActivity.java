@@ -5,9 +5,7 @@ import java.util.Calendar;
 import org.muffinapps.onlyaweek.AddNewExamFragment.OnConfirmListener;
 import org.muffinapps.onlyaweek.ExamListFragment.ExamActionListener;
 import org.muffinapps.onlyaweek.PlanningFragment.PlanningListener;
-import org.muffinapps.onlyaweek.database.CustomCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamAdapter;
-import org.muffinapps.onlyaweek.database.ExamCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamDataSource;
 import org.muffinapps.onlyaweek.database.QueryExamList;
 
@@ -27,9 +25,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 															ExamActionListener,
 															OnConfirmListener,
 															PlanningListener{
-	private static final int PREPARING_LIST = 0,
-			NO_PREPARING_LIST = 1,
-			ALL_LIST = 2;
 	private static final int DATE = 0,
 			NAME = 1,
 			PREPARING = 2;
@@ -37,8 +32,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 			EDIT_FRAGMENT = 1,
 			PLANNING_FRAGMENT = 2;
 	
-	private ExamListFragment allListFragment, preparingListFragment, notPreparingListFragment;
-	private ExamListFragment dateListFragment, nameListFragment;
 	private ExamListFragment listFragment;
 	private View contentFrame;
 	private long examEnhanced;
@@ -63,13 +56,13 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		actionBar.setListNavigationCallbacks(aAdpt, this);
 		
 		if(savedInstanceState != null){
-			currentListContent = savedInstanceState.getInt("currentListContent", PREPARING_LIST);
+			currentListContent = savedInstanceState.getInt("currentListContent", DATE);
 			if(contentFrame != null){
 				currentRightContent = savedInstanceState.getInt("currentRightContent", ADD_FRAGMENT);
 				examEnhanced = savedInstanceState.getInt("exam", -1);
 			}
 		}else{
-			currentListContent = PREPARING_LIST;
+			currentListContent = DATE;
 			currentRightContent = ADD_FRAGMENT;
 			examEnhanced = -1;
 		}
@@ -110,12 +103,6 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	        	}else{
 	        		setRightContent(ADD_FRAGMENT, -1);
 	        	}	            
-	            return true;
-	        case R.id.action_sort:
-	        	//TODO
-	            return true;
-	        case R.id.action_settings:
-	        	//TODO
 	            return true;
 	        case R.id.action_exit:
 	        	this.finish();

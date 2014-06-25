@@ -3,18 +3,33 @@ package org.muffinapps.onlyaweek;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class StudyingRatioUtils {
+public class StudyingRatio {
+	private float ratio;
+	private int remainingPages, revisionDays;
+	private GregorianCalendar examDate;
 	
-	public static float calculateRatio(int remainingPages, GregorianCalendar examDate, int revisionDays){
+	public StudyingRatio(int remainingPages, GregorianCalendar examDate, int revisionDays){
+		this.remainingPages = remainingPages;
+		this.examDate = examDate;
+		this.revisionDays = revisionDays;
+		
+		calculateRatio();
+	}
+
+	public float getRatio() {
+		return ratio;
+	}
+	
+	private void calculateRatio(){
 		int remainingDays;
 		GregorianCalendar today = (GregorianCalendar) GregorianCalendar.getInstance();
 		
 		remainingDays = getJulianDay(examDate) - getJulianDay(today) - revisionDays;
 		
 		if(remainingDays <= 0){
-			return -1;
+			ratio = -1;
 		}else{
-			return remainingPages / (float) remainingDays;
+			ratio = remainingPages / (float) remainingDays;
 		}
 	}
 	
@@ -40,7 +55,7 @@ public class StudyingRatioUtils {
 		return c + day + e + f - 1524;
 	}
 	
-	public static String getRatioString(float ratio){
+	public String getRatioString(){
 		if(ratio < 0)
 			return "Repasando...";
 		
@@ -54,7 +69,7 @@ public class StudyingRatioUtils {
 		return result + " pags/dia";
 	}
 	
-	public static String getRatioComment(float ratio, int remainingPages){
+	public String getRatioComment(){
 		if(ratio < 0){
 			if(remainingPages > 0){
 				return "¿En días de repaso y aún con páginas por estudiar? Más te vale terminar con lo que te queda cuanto antes.";
@@ -78,7 +93,7 @@ public class StudyingRatioUtils {
 		return "¿Desde cuando vas tan mál? A nosotros no nos eches las culpas. Espero que tengas café suficiente porque lo tienes crudo si quieres aprobar.";
 	}
 	
-	public static int getRatioColorResource(float ratio, int remainingPages){
+	public int getRatioColorResource(){
 		if(ratio < 0){
 			if(remainingPages > 0){
 				return R.color.color_awful;
@@ -101,4 +116,5 @@ public class StudyingRatioUtils {
 		
 		return R.color.color_awful;
 	}
+
 }
