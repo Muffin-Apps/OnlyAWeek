@@ -5,9 +5,9 @@ import org.emud.content.Query;
 import android.database.Cursor;
 
 public class QueryExamList implements Query<Cursor> {
-	public static final int ALL_EXAM = 0,
-							EXAM_PREPARATION = 1,
-							EXAM_NOT_PREPARATION =2;
+	public static final int ORDER_DATE = 0,
+							ORDER_NAME = 1,
+							ORDER_PREPARING = 2;
 	
 	private ExamDataSource db;
 	private int typeQuery;
@@ -23,12 +23,12 @@ public class QueryExamList implements Query<Cursor> {
 	@Override
 	public Cursor execute() {
 		switch(typeQuery){
-		case ALL_EXAM:
-			return db.getAllExam();
-		case EXAM_PREPARATION:
-			return db.getExamPreparation();
-		case EXAM_NOT_PREPARATION:
-			return db.getExamNotPreparation();
+		case ORDER_DATE:
+			return db.getAllExam(db.NAME_COL[2]);
+		case ORDER_NAME:
+			return db.getAllExam(db.NAME_COL[1]);
+		case ORDER_PREPARING:
+			return db.getAllExam(db.NAME_COL[5]);
 		default:
 			break;
 		}

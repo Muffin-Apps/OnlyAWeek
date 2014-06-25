@@ -19,9 +19,9 @@
     <string name="planningupdate_text">¿Cuántas páginas has estudiado desde la última actualización?</string>
 
     <string-array name="lists_titles">
+        <item>Fecha</item>
+        <item>Nombre A-Z</item>
         <item>Preparando</item>
-        <item>PAS</item>
-        <item>Todos</item>
     </string-array>
 
     <string name="title_activity_add_new_exam">AddNewExamActivity</string>

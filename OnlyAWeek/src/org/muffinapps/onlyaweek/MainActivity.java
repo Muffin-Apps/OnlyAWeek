@@ -29,11 +29,15 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	private static final int PREPARING_LIST = 0,
 			NO_PREPARING_LIST = 1,
 			ALL_LIST = 2;
+	private static final int DATE = 0,
+			NAME = 1,
+			PREPARING = 2;
 	private static final int ADD_FRAGMENT = 0,
 			EDIT_FRAGMENT = 1,
 			PLANNING_FRAGMENT = 2;
 	
 	private ExamListFragment allListFragment, preparingListFragment, notPreparingListFragment;
+	private ExamListFragment dateListFragment, nameListFragment;
 	private ExamListFragment listFragment;
 	private View contentFrame;
 	private long examEnhanced;
@@ -125,13 +129,13 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		int newContent;
 		switch(position){
 		case 0:
-			newContent = PREPARING_LIST;
+			newContent = DATE;
 			break;
 		case 1:
-			newContent = NO_PREPARING_LIST;
+			newContent = NAME;
 			break;
 		case 2:
-			newContent = ALL_LIST;
+			newContent = PREPARING;
 			break;
 		default: return false;
 		}
@@ -146,44 +150,40 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 
 	private void setListContent() {
 		switch(currentListContent){
-		case PREPARING_LIST:
+		case DATE:
+			if(dateListFragment == null){
+				dateListFragment = new ExamListFragment();
+				QueryExamList queryDateExam = new QueryExamList(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
+				queryDateExam.setTypeQuery(QueryExamList.ORDER_DATE);	
+				dateListFragment.setQuery(queryDateExam);
+
+			}
+			listFragment = dateListFragment;
+			break;
+		case NAME:
+			if(nameListFragment == null){
+				nameListFragment = new ExamListFragment();
+				QueryExamList queryNotPrepar = new QueryExamList(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
+				queryNotPrepar.setTypeQuery(QueryExamList.ORDER_NAME);
+				nameListFragment.setQuery(queryNotPrepar);
+
+			}
+			listFragment = nameListFragment;
+			break;
+		case PREPARING:
 			if(preparingListFragment == null){
 				preparingListFragment = new ExamListFragment();
-				QueryExamList queryPreparExam = new QueryExamList(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
-				queryPreparExam.setTypeQuery(QueryExamList.EXAM_PREPARATION);
+				QueryExamList queryPreparingExam = new QueryExamList(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
+				queryPreparingExam.setTypeQuery(QueryExamList.ORDER_PREPARING);
+				preparingListFragment.setQuery(queryPreparingExam);
 				
-				preparingListFragment.setQuery(queryPreparExam);
-				preparingListFragment.setListAdapter(new CustomCursorAdapter(this));
-				preparingListFragment.setExamActionListener(this);
 			}
 			listFragment = preparingListFragment;
 			break;
-		case NO_PREPARING_LIST:
-			if(notPreparingListFragment == null){
-				notPreparingListFragment = new ExamListFragment();
-				QueryExamList queryNotPrepar = new QueryExamList(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
-				queryNotPrepar.setTypeQuery(QueryExamList.EXAM_NOT_PREPARATION);
-				notPreparingListFragment.setQuery(queryNotPrepar);
-				
-				notPreparingListFragment.setListAdapter(new ExamCursorAdapter(this));
-				notPreparingListFragment.setExamActionListener(this);
-			}
-			listFragment = notPreparingListFragment;
-			break;
-		case ALL_LIST:
-			if(allListFragment == null){
-				allListFragment = new ExamListFragment();
-				QueryExamList queryAllExam = new QueryExamList(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
-				queryAllExam.setTypeQuery(QueryExamList.ALL_EXAM);
-				allListFragment.setQuery(queryAllExam);
-				
-				allListFragment.setListAdapter(new ExamCursorAdapter(this));
-				allListFragment.setExamActionListener(this);
-			}
-			listFragment = allListFragment;
-			break;
 		}
 		
+		listFragment.setListAdapter(new ExamCursorAdapter(this));
+		listFragment.setExamActionListener(this);
 		
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		fragmentTransaction.replace(R.id.main_content_frame, listFragment);
