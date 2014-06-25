@@ -150,45 +150,28 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 	}
 
 	private void setListContent() {
+		if(listFragment==null){
+			QueryExamList query = new QueryExamList(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
+			listFragment = new ExamListFragment();
+			listFragment.setQuery(query);
+			listFragment.setListAdapter(new ExamAdapter(this));
+			listFragment.setExamActionListener(this);
+			
+			FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+			fragmentTransaction.replace(R.id.main_content_frame, listFragment);
+			fragmentTransaction.commit();
+		}
 		switch(currentListContent){
 		case DATE:
-			if(dateListFragment == null){
-				dateListFragment = new ExamListFragment();
-				QueryExamList queryDateExam = new QueryExamList(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
-				queryDateExam.setTypeQuery(QueryExamList.ORDER_DATE);	
-				dateListFragment.setQuery(queryDateExam);
-
-			}
-			listFragment = dateListFragment;
+			listFragment.setTypeQuery(QueryExamList.ORDER_DATE);	
 			break;
 		case NAME:
-			if(nameListFragment == null){
-				nameListFragment = new ExamListFragment();
-				QueryExamList queryNotPrepar = new QueryExamList(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
-				queryNotPrepar.setTypeQuery(QueryExamList.ORDER_NAME);
-				nameListFragment.setQuery(queryNotPrepar);
-
-			}
-			listFragment = nameListFragment;
+			listFragment.setTypeQuery(QueryExamList.ORDER_NAME);
 			break;
 		case PREPARING:
-			if(preparingListFragment == null){
-				preparingListFragment = new ExamListFragment();
-				QueryExamList queryPreparingExam = new QueryExamList(((OnlyAWeekApplication) getApplicationContext()).getDataBase());
-				queryPreparingExam.setTypeQuery(QueryExamList.ORDER_PREPARING);
-				preparingListFragment.setQuery(queryPreparingExam);
-				
-			}
-			listFragment = preparingListFragment;
+			listFragment.setTypeQuery(QueryExamList.ORDER_PREPARING);
 			break;
 		}
-		
-		listFragment.setListAdapter(new ExamAdapter(this));
-		listFragment.setExamActionListener(this);
-		
-		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-		fragmentTransaction.replace(R.id.main_content_frame, listFragment);
-		fragmentTransaction.commit();
 	}
 	
 	private void setRightContent(int newContent, long examId){
@@ -231,7 +214,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 		
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		fragmentTransaction.replace(R.id.add_exam_content_frame, currentRightFragment);
-		fragmentTransaction.commit();
+		fragmentTransaction.commitAllowingStateLoss();
 	}
 	
 	@Override

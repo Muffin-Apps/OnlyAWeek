@@ -6,6 +6,7 @@ import java.util.List;
 import org.emud.content.Query;
 import org.emud.support.v4.content.ObserverCursorLoader;
 import org.muffinapps.onlyaweek.database.ExamDataSource;
+import org.muffinapps.onlyaweek.database.QueryExamList;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
@@ -31,14 +32,23 @@ import android.widget.ListView;
 
 public class ExamListFragment extends ListFragment implements LoaderCallbacks<Cursor>{
 	private ExamActionListener actionListener;
-	private Query<Cursor> query;
+	private QueryExamList query;
 	
 	public void setExamActionListener(ExamActionListener listener){
 		actionListener = listener;
 	}
 	
-	public void setQuery(Query<Cursor> q){
+	public void setQuery(QueryExamList q){
 		query = q;
+	}
+	
+	public void setTypeQuery(int type){
+		if(query != null){
+			query.setTypeQuery(type);
+			if(isAdded()){
+				getLoaderManager().restartLoader(0, null, this);
+			}
+		}
 	}
 	
 	@Override
