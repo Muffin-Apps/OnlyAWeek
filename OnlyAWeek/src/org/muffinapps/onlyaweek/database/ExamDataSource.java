@@ -71,7 +71,7 @@ public class ExamDataSource{
 		Cursor c = null;
 		String [] col = {NAME_COL[0], NAME_COL[1], NAME_COL[2]};
 		
-		c = db.query(NAME_TABLE, col, null, null, null, null, order);
+		c = db.query(NAME_TABLE, NAME_COL, null, null, null, null, order);
 		
 		c.moveToFirst();
 		

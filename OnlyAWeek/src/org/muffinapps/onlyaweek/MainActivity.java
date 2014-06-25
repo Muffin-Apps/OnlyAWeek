@@ -6,6 +6,7 @@ import org.muffinapps.onlyaweek.AddNewExamFragment.OnConfirmListener;
 import org.muffinapps.onlyaweek.ExamListFragment.ExamActionListener;
 import org.muffinapps.onlyaweek.PlanningFragment.PlanningListener;
 import org.muffinapps.onlyaweek.database.CustomCursorAdapter;
+import org.muffinapps.onlyaweek.database.ExamAdapter;
 import org.muffinapps.onlyaweek.database.ExamCursorAdapter;
 import org.muffinapps.onlyaweek.database.ExamDataSource;
 import org.muffinapps.onlyaweek.database.QueryExamList;
@@ -182,7 +183,7 @@ public class MainActivity extends FragmentActivity implements OnNavigationListen
 			break;
 		}
 		
-		listFragment.setListAdapter(new ExamCursorAdapter(this));
+		listFragment.setListAdapter(new ExamAdapter(this));
 		listFragment.setExamActionListener(this);
 		
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
