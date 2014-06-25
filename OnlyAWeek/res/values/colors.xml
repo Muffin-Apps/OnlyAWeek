@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_great">#609732</color>
+    <color name="color_good">#91A437</color>
+    <color name="color_meh">#AA9B39</color>
+    <color name="color_bad">#AA7A39</color>
+    <color name="color_awful">#AA4639</color>
+    <color name="color_not_preparing">#73999B</color>
+    
+</resources>

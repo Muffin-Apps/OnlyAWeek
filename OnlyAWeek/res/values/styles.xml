@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Holo">
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -24,6 +24,11 @@
         <item name="android:layout_marginRight">@dimen/inner_padding</item> 
     </style>
     
+    <style name="ColorItem">
+        <item name="android:layout_marginLeft">@dimen/inner_padding</item>
+        <item name="android:layout_marginRight">@dimen/inner_padding</item> 
+    </style>
+    
     <style name="ValueHeaderText" parent="@android:style/TextAppearance.Medium">
         <item name="android:layout_marginLeft">@dimen/inner_padding</item>
         <!-- <item name="android:textColor">#6a6a6a</item-->
@@ -31,7 +36,7 @@
     
     <style name="ValueText" parent="@android:style/TextAppearance.Medium">
         <item name="android:layout_marginLeft">@dimen/inner_padding</item>
-        <item name="android:textColor">#b4b4b4</item>
+        <item name="android:textColor">#161616</item>
     </style>
     
     <style name="Divider" parent="AppTheme">

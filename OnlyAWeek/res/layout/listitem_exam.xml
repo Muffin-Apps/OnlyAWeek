@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/ListItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#dedede"
     >
     <LinearLayout
         android:id = "@+id/back"
@@ -20,14 +20,33 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
-    
+
 <LinearLayout
-    android:id = "@+id/front"
+    android:id="@+id/front"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@android:color/background_light"
-    android:tag="front">
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/outter_padding"
+    android:paddingTop="@dimen/outter_padding" >
+
+    <LinearLayout
+        android:id="@+id/colorExam"
+        style="@style/ColorItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:background="@color/color_not_preparing"
+        android:orientation="vertical" >
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:tag="front" >
 
     <TextView
         style="@style/ValueHeaderText"
@@ -44,4 +63,7 @@
         android:text="26/10/2011" />
 
 </LinearLayout>
+
+</LinearLayout>
+
 </FrameLayout>

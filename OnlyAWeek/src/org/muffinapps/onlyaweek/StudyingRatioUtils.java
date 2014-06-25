@@ -77,4 +77,28 @@ public class StudyingRatioUtils {
 		
 		return "¿Desde cuando vas tan mál? A nosotros no nos eches las culpas. Espero que tengas café suficiente porque lo tienes crudo si quieres aprobar.";
 	}
+	
+	public static int getRatioColorResource(float ratio, int remainingPages){
+		if(ratio < 0){
+			if(remainingPages > 0){
+				return R.color.color_awful;
+			}else{
+				return R.color.color_great;				
+			}
+		}
+		
+		if(ratio < 10.0f)
+			return R.color.color_great;
+					
+		if(ratio < 20.f)
+			return R.color.color_good;
+		
+		if(ratio < 30.0f)
+			return R.color.color_meh;
+		
+		if(ratio < 40.0f)
+			return R.color.color_bad;
+		
+		return R.color.color_awful;
+	}
 }

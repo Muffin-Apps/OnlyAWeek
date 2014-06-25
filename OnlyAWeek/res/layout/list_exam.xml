@@ -6,10 +6,11 @@
 
     <com.fortysevendeg.swipelistview.SwipeListView
         xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/background_light"
         android:id="@id/android:list"
         android:listSelector="#00000000"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         swipe:swipeFrontView="@+id/front"
         swipe:swipeBackView="@+id/back" 
         swipe:swipeCloseAllItemsWhenMoveList="true"
